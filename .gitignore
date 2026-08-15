@@ -1,0 +1,11 @@
+# Front-end (Vue.js)
+client/node_modules/
+client/dist/
+
+# Back-end (.NET)
+server/**/bin/
+server/**/obj/
+
+# Général
+.vscode/
+*.env
