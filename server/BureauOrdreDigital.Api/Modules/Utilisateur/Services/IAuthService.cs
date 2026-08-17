@@ -1,12 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using BureauOrdreDigital.Api.Modules.Utilisateur.DTOs;
+using BureauOrdreDigital.Api.Modules.Utilisateur.Models;
 
-namespace BureauOrdreDigital.Api.Modules.Utilisateur.Services
+namespace BureauOrdreDigital.Api.Modules.Utilisateur.Services;
+
+public interface IAuthService
 {
-    public class IAuthService
-    {
-        
-    }
+    Task<Models.Utilisateur> Register(RegisterDto dto);
+
+    Task<Models.Utilisateur> Login(LoginDto dto);
+
+    Task VerifyEmail(string token);
 }

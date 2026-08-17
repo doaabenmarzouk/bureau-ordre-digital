@@ -20,9 +20,33 @@ public class AuthController : ControllerBase
     {
         try
         {
-            var utilisateur = await _authService.Register(dto);
+            await _authService.Register(dto);
 
-            return Ok(utilisateur);
+            return Ok(new
+            {
+                message = "Compte créé. Vérifiez votre email pour l'activer."
+            });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new
+            {
+                message = ex.Message
+            });
+        }
+    }
+
+    [HttpGet("verify-email")]
+    public async Task<IActionResult> VerifyEmail([FromQuery] string token)
+    {
+        try
+        {
+            await _authService.VerifyEmail(token);
+
+            return Ok(new
+            {
+                message = "Email vérifié avec succès. Vous pouvez maintenant vous connecter."
+            });
         }
         catch (InvalidOperationException ex)
         {
@@ -40,7 +64,13 @@ public class AuthController : ControllerBase
         {
             var utilisateur = await _authService.Login(dto);
 
-            return Ok(utilisateur);
+            return Ok(new
+            {
+                utilisateur.Id,
+                utilisateur.Nom,
+                utilisateur.Prenom,
+                utilisateur.Email
+            });
         }
         catch (InvalidOperationException ex)
         {
