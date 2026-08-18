@@ -62,15 +62,9 @@ public class AuthController : ControllerBase
     {
         try
         {
-            var utilisateur = await _authService.Login(dto);
+            var reponse = await _authService.Login(dto);
 
-            return Ok(new
-            {
-                utilisateur.Id,
-                utilisateur.Nom,
-                utilisateur.Prenom,
-                utilisateur.Email
-            });
+            return Ok(reponse);
         }
         catch (InvalidOperationException ex)
         {
