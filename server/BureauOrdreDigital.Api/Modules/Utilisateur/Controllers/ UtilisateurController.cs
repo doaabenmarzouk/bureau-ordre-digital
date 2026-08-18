@@ -3,7 +3,6 @@ using BureauOrdreDigital.Api.Modules.Utilisateur.DTOs;
 using BureauOrdreDigital.Api.Modules.Utilisateur.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
 namespace BureauOrdreDigital.Api.Modules.Utilisateur.Controllers;
 
 [ApiController]
