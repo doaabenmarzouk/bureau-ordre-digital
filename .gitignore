@@ -9,3 +9,4 @@ server/**/obj/
 # Général
 .vscode/
 *.env
+appsettings.Development.json

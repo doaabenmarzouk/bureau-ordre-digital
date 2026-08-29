@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-amber: #EF9F27;
+  --color-brand-amberDark: #412402;
+  --color-brand-amberLight: #FAEEDA;
+  --color-brand-text: #854F0B;
+}
+
+html, body {
+  width: 100%;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+#app {
+  width: 100%;
+  min-height: 100vh;
+}

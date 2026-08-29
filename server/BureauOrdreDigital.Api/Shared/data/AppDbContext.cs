@@ -18,6 +18,7 @@ public class AppDbContext : DbContext
     public DbSet<StatutCourrier> StatutsCourrier { get; set; }
     public DbSet<PieceJointe> PiecesJointes { get; set; }
     public DbSet<HistoriqueAction> HistoriqueActions { get; set; }
+    public DbSet<RevokedToken> RevokedTokens { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -152,22 +153,30 @@ public class AppDbContext : DbContext
                 .IsRequired();
         });
 
-        modelBuilder.Entity<ServiceDestinataire>(entity =>
-        {
-            entity.ToTable("ServiceDestinataire");
-            entity.HasKey(s => s.Id);
+       modelBuilder.Entity<ServiceDestinataire>(entity =>
+{
+    entity.ToTable("ServiceDestinataire");
+    entity.HasKey(s => s.Id);
 
-            entity.Property(s => s.NomService)
-                .IsRequired()
-                .HasMaxLength(150);
+    entity.Property(s => s.NomService)
+        .IsRequired()
+        .HasMaxLength(150);
 
-            entity.Property(s => s.NomOrganisme)
-                .IsRequired()
-                .HasMaxLength(150);
+    entity.Property(s => s.NomOrganisme)
+        .IsRequired()
+        .HasMaxLength(150);
 
-            entity.Property(s => s.Actif)
-                .IsRequired();
-        });
+    entity.Property(s => s.Ville)
+        .IsRequired()
+        .HasMaxLength(100);
+
+    entity.Property(s => s.TypeOrganisme)
+        .IsRequired()
+        .HasMaxLength(100);
+
+    entity.Property(s => s.Actif)
+        .IsRequired();
+});
 
         modelBuilder.Entity<PieceJointe>(entity =>
         {

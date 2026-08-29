@@ -1,12 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace BureauOrdreDigital.Api.Modules.Courrier.DTOs
+public class HistoriqueActionDto
 {
-    public class HistoriqueActionDto
-    {
-        
-    }
+    public Guid Id { get; set; }
+    public string Statut { get; set; } = string.Empty;
+    public DateTime DateAction { get; set; }
+    public string? Description { get; set; }
+   
 }

@@ -13,15 +13,17 @@ namespace BureauOrdreDigital.Api.Modules.Utilisateur.Services;
 public class AuthService : IAuthService
 {
     private readonly AppDbContext _context;
-    private readonly EmailService _emailService;
+  
     private readonly IConfiguration _configuration;
 
-    public AuthService(AppDbContext context, EmailService emailService, IConfiguration configuration)
-    {
-        _context = context;
-        _emailService = emailService;
-        _configuration = configuration;
-    }
+    private readonly IEmailService _emailService;
+
+public AuthService(AppDbContext context, IEmailService emailService, IConfiguration configuration)
+{
+    _context = context;
+    _emailService = emailService;
+    _configuration = configuration;
+}
 
     public async Task<Models.Utilisateur> Register(RegisterDto dto)
     {
@@ -46,8 +48,11 @@ public class AuthService : IAuthService
 
         _context.Utilisateurs.Add(utilisateur);
         await _context.SaveChangesAsync();
+        var lien =
+    $"http://localhost:5029/api/auth/verify-email?token={utilisateur.TokenVerification}";
+var corps = ConstruireTemplateVerification(lien);
 
-        _emailService.EnvoyerEmailVerification(utilisateur.Email, utilisateur.TokenVerification!);
+await _emailService.SendEmailAsync(utilisateur.Email, "Vérifiez votre adresse email", corps);
 
         return utilisateur;
     }
@@ -129,4 +134,54 @@ public class AuthService : IAuthService
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
+  private static string ConstruireTemplateVerification(string lien)
+{
+    return $$"""
+    <div style="font-family: Arial, sans-serif; background-color: #f4f6f8; padding: 40px 20px;">
+        <div style="max-width: 560px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; padding: 40px; text-align: center; border: 1px solid #e5e7eb;">
+
+            <h2 style="color: #91a91c; margin-bottom: 20px;">
+                Bureau d'Ordre Digital
+            </h2>
+
+            <h3 style="color: #111827; font-size: 22px; margin-bottom: 15px;">
+                Vérification de votre adresse email
+            </h3>
+
+            <p style="color: #4b5563; font-size: 15px; line-height: 1.7;">
+                Bienvenue sur le Bureau d'Ordre Digital.
+                Pour activer votre compte, veuillez confirmer votre adresse email.
+            </p>
+
+            <a href="{{lien}}"
+               style="display: inline-block;
+                      margin: 25px 0;
+                      padding: 14px 30px;
+                      background-color: #1e3a8a;
+                      color: #ffffff;
+                      text-decoration: none;
+                      border-radius: 7px;
+                      font-weight: bold;
+                      font-size: 14px;">
+                Vérifier mon email
+            </a>
+
+            <p style="color: #6b7280; font-size: 13px; line-height: 1.6; margin-top: 25px;">
+                Ce lien est personnel et vous permet d'activer votre compte.
+            </p>
+
+            <p style="color: #9ca3af; font-size: 12px; line-height: 1.6; margin-top: 25px;">
+                Si vous n'êtes pas à l'origine de cette demande, vous pouvez ignorer cet email.
+            </p>
+
+            <hr style="border: 0; border-top: 1px solid #e5e7eb; margin: 30px 0;">
+
+            <p style="color: #9ca3af; font-size: 11px;">
+                © 2026 Bureau d'Ordre Digital
+            </p>
+
+        </div>
+    </div>
+    """;
+}
 }
