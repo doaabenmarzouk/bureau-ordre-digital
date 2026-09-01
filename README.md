@@ -1,96 +1,501 @@
-# Bureau d'Ordre Digital
+# 🏛️ Bureau d'Ordre Digital
 
-Application de gestion digitalisée des courriers citoyens, permettant la soumission et le suivi des correspondances avec l'administration en ligne.
+Application web de gestion digitalisée des courriers citoyens permettant la **soumission, le traitement et le suivi des correspondances administratives en ligne**.
 
-Projet réalisé dans le cadre d'un stage chez **NeoLedge MEA**, sous la supervision d'Ali BEN YAHIA.
+Projet réalisé dans le cadre d'un stage chez **NeoLedge MEA**, sous la supervision de **Ali BEN YAHIA**.
+
+---
+
+## 📌 Contexte
+
+Le projet s'inscrit dans une démarche de **digitalisation des services publics** afin de simplifier les démarches administratives des citoyens, améliorer la traçabilité des courriers et faciliter leur traitement par les services concernés.
+
+Une fonctionnalité d'**Intelligence Artificielle** est également intégrée afin d'assister le citoyen dans la préparation de son courrier.
+
+---
+
+## ✨ Fonctionnalités
+
+### 👤 Gestion des utilisateurs
+
+- Inscription avec vérification de l'adresse email
+- Authentification sécurisée
+- Gestion du profil utilisateur
+- Gestion de session
+- Déconnexion
+
+### 📄 Gestion des courriers
+
+- Soumission de courriers en ligne
+- Sélection du type de courrier
+- Sélection du service destinataire
+- Saisie de l'objet et de la description
+- Ajout de pièces jointes
+- Validation des informations
+- Génération automatique d'un accusé de réception
+
+### 🔎 Suivi des courriers
+
+- Consultation des courriers soumis
+- Recherche par mots-clés
+- Consultation du détail d'un courrier
+- Historique des modifications
+- Chronologie des statuts
+- Notifications par email
+
+### 🤖 Assistant Citoyen IA
+
+L'Assistant Citoyen aide l'utilisateur à préparer son courrier administratif à partir de différentes sources :
+
+- 💬 Description libre de son problème
+- 📄 Document PDF
+- 📄 + 💬 Document PDF accompagné d'une description
+
+L'IA analyse les informations fournies et peut proposer :
+
+```text
+Type de courrier
+Service destinataire
+Objet
+Description
+Résumé du document
+
+Le citoyen conserve le contrôle de sa demande et peut modifier les suggestions de l'IA avant de soumettre le courrier.
+
+Exemple
+Citoyen :
+
+"J'ai reçu ce document et je ne sais pas à quel service
+je dois m'adresser."
+
+                ↓
+
+          🤖 Assistant IA
+
+                ↓
+
+Type de courrier :
+Demande d'information
+
+Service destinataire :
+Service concerné
+
+Objet :
+Demande d'informations concernant le dossier
+
+Description :
+Générée à partir des informations fournies.
+
+🧠 Fonctionnement de l'Assistant IA
+
+L'Assistant Citoyen suit le processus suivant :
+              👤 Citoyen
+                  │
+        ┌─────────┴─────────┐
+        │                   │
+        ▼                   ▼
+   💬 Description       📄 Document PDF
+        │                   │
+        └─────────┬─────────┘
+                  │
+                  ▼
+           Microservice IA
+               FastAPI
+                  │
+                  ▼
+          Extraction du texte
+                  │
+                  ▼
+             Analyse IA
+                  │
+        ┌─────────┼─────────┐
+        ▼         ▼         ▼
+      Type     Service     Objet
+    courrier  destinataire   │
+        │         │         │
+        └─────────┼─────────┘
+                  ▼
+             Description
+                  │
+                  ▼
+          🤖 Suggestions IA
+                  │
+                  ▼
+           👤 Validation
+                  │
+                  ▼
+            ✏️ Modification
+                  │
+                  ▼
+             📤 Soumission
+
+L'IA fournit des recommandations et ne soumet pas automatiquement le courrier.
+
+Le citoyen peut vérifier et modifier les informations proposées avant l'envoi.
+
+🏗️ Architecture
+
+Le backend suit une architecture Modular Monolith.
+
+Chaque fonctionnalité principale est organisée dans un module indépendant avec ses propres :
+
+Controllers
+Services
+Models
+DTOs
+
+Le module IA est externalisé sous la forme d'un microservice Python basé sur FastAPI.
+
+Le backend ASP.NET Core communique avec le microservice IA via une API REST.
+                         ┌──────────────────────┐
+                         │      Citoyen         │
+                         │       Vue.js         │
+                         └──────────┬───────────┘
+                                    │
+                                    │ REST API
+                                    ▼
+                  ┌────────────────────────────────┐
+                  │        ASP.NET Core .NET 10    │
+                  │                                │
+                  │       Modular Monolith         │
+                  │                                │
+                  │  ┌────────────┐ ┌────────────┐│
+                  │  │ Utilisateur│ │  Courrier  ││
+                  │  └────────────┘ └────────────┘│
+                  │                                │
+                  │  ┌────────────┐ ┌────────────┐│
+                  │  │    Suivi   │ │     IA     ││
+                  │  └────────────┘ └──────┬─────┘│
+                  └────────────────────────┼──────┘
+                                           │
+                                           │ REST API
+                                           ▼
+                              ┌──────────────────────┐
+                              │   Microservice IA    │
+                              │       FastAPI        │
+                              │                      │
+                              │ PDF + Description    │
+                              │          ↓           │
+                              │       Analyse        │
+                              │          ↓           │
+                              │     Suggestions      │
+                              └──────────┬───────────┘
+                                         │
+                                         ▼
+                              ┌──────────────────────┐
+                              │      LLM / IA        │
+                              └──────────────────────┘
 
 
-## Contexte
+🛠️ Stack technique
+Domaine	Technologie
+Frontend	Vue.js
+Backend	ASP.NET Core .NET 10
+Base de données	SQL Server
+ORM	Entity Framework Core
+Authentification	JWT
+Microservice IA	Python + FastAPI
+Analyse PDF	PyMuPDF
+OCR	Tesseract OCR
+IA / LLM	OpenAI API
+Orchestration IA	LangChain
+Vector Database	ChromaDB
+Embeddings	OpenAI Embeddings
+Communication	REST API
+Conteneurisation	Docker
+Gestion de versions	Git / GitHub
+Documentation	PlantUML
+📁 Structure du projet
+BureauOrdreDigital/
+│
+├── BureauOrdreDigital.Api/
+│   │
+│   ├── Modules/
+│   │   │
+│   │   ├── Utilisateur/
+│   │   │   ├── Controllers/
+│   │   │   ├── Services/
+│   │   │   ├── Models/
+│   │   │   └── DTOs/
+│   │   │
+│   │   ├── Courrier/
+│   │   │   ├── Controllers/
+│   │   │   ├── Services/
+│   │   │   ├── Models/
+│   │   │   └── DTOs/
+│   │   │
+│   │   ├── Suivi/
+│   │   │   ├── Controllers/
+│   │   │   ├── Services/
+│   │   │   ├── Models/
+│   │   │   └── DTOs/
+│   │   │
+│   │   └── IA/
+│   │       ├── Services/
+│   │       ├── DTOs/
+│   │       └── Clients/
+│   │
+│   ├── Shared/
+│   │   ├── Data/
+│   │   ├── Services/
+│   │   └── Middlewares/
+│   │
+│   └── Program.cs
+│
+├── client/
+│   ├── src/
+│   ├── package.json
+│   └── ...
+│
+├── services-ia/
+│   │
+│   └── classification/
+│       ├── app/
+│       ├── services/
+│       ├── models/
+│       ├── requirements.txt
+│       └── main.py
+│
+├── docs/
+│   └── bureau_ordre_diagrammes.puml
+│
+├── .gitignore
+└── README.md
+🔐 Sécurité
 
-Le développement de cette application s'inscrit dans le cadre de la modernisation et de la digitalisation des services publics, visant à améliorer l'efficacité administrative et la transparence pour les citoyens.
+Le projet intègre plusieurs mécanismes de sécurité :
 
-## Fonctionnalités
+Authentification par JWT
+Hashage sécurisé des mots de passe
+Vérification de l'adresse email
+Protection des endpoints nécessitant une authentification
+Gestion de la déconnexion
+Révocation des tokens
+Validation des données reçues
+Validation des fichiers uploadés
+Limitation de la taille des pièces jointes
+Restriction des extensions de fichiers autorisées
+Protection des informations sensibles
+Utilisation des User Secrets et variables d'environnement
 
-- **Gestion des utilisateurs** — inscription avec vérification email, authentification, gestion du profil
-- **Soumission de courrier** — formulaire multi-étapes (service destinataire, type, objet, description, pièces jointes), génération automatique d'un accusé de réception
-- **Suivi de courrier** — historique, recherche par mots-clés, détail avec chronologie des statuts, notifications par email
-- **Classification automatique** *(module IA)* — suggestion du type de courrier à partir de la description, via un microservice dédié
+Les clés API, mots de passe et autres informations sensibles ne doivent jamais être enregistrés directement dans le dépôt Git.
 
-## Stack technique
+📎 Gestion des pièces jointes
 
-| Couche | Technologie |
-|---|---|
-| Frontend | Vue.js |
-| Backend | ASP.NET Core (.NET 10) |
-| Base de données | SQL Server |
-| Microservice IA | Python, FastAPI |
-| Conteneurisation | Docker |
-| Gestion de versions | Git / GitHub |
+Les formats autorisés sont :
 
-## Architecture
+PDF
+JPEG
+JPG
+PNG
+DOCX
+XLSX
 
-Le projet suit une **architecture modulaire (modular monolith)** : chaque fonctionnalité est isolée dans son propre module (Controllers, Services, Models), avec un socle commun partagé (accès aux données, middlewares). Le module IA est externalisé en microservice Python indépendant, appelé en REST par le backend .NET.
+Limites :
 
-Cette organisation permet d'ajouter facilement de nouvelles fonctionnalités sans impacter les modules existants — exigence explicite du cahier des charges (section 3.4, Architecture modulaire).
+Taille maximale par fichier : 5 MB
+Taille maximale totale : 20 MB
+📋 Prérequis
 
-```
-BureauOrdreDigital.Api/
-├── Modules/
-│   ├── Courrier/
-│   ├── Utilisateur/
-│   ├── Suivi/
-│   └── IA/                  (client HTTP vers le microservice)
-├── Shared/
-│   ├── Data/
-│   └── Middlewares/
-└── Program.cs
+Avant de lancer le projet, installer :
 
-services-ia/
-└── classification/           (FastAPI)
-```
+.NET 10 SDK
+Node.js 20+
+Python 3.11+
+Docker Desktop
+Git
 
-## Prérequis
+Installer également Entity Framework Core CLI :
 
-- [.NET 10 SDK](https://dotnet.microsoft.com/download)
-- [Node.js 20+](https://nodejs.org/)
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/)
-- [Entity Framework Core CLI](https://learn.microsoft.com/en-us/ef/core/cli/dotnet) (`dotnet tool install --global dotnet-ef`)
+dotnet tool install --global dotnet-ef
+🗄️ Base de données — SQL Server
 
-## Installation
+Le projet utilise SQL Server via Docker.
 
-### Base de données (SQL Server via Docker)
+Télécharger l'image :
 
-```bash
 docker pull mcr.microsoft.com/mssql/server:2022-latest
-docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=VotreMotDePasse123!" \
-  -p 1433:1433 --name sqlserver -d mcr.microsoft.com/mssql/server:2022-latest
-```
 
-Exécuter ensuite le script `bureau_ordre_schema.sql` pour créer les tables.
+Créer le conteneur :
 
-### Backend
+docker run \
+  -e "ACCEPT_EULA=Y" \
+  -e "MSSQL_SA_PASSWORD=VotreMotDePasse123!" \
+  -p 1433:1433 \
+  --name sqlserver \
+  -d mcr.microsoft.com/mssql/server:2022-latest
 
-```bash
+Vérifier que le conteneur fonctionne :
+
+docker ps
+
+Puis créer la base de données à partir du script SQL du projet.
+
+⚙️ Installation du Backend
+
+Se placer dans le dossier backend :
+
 cd BureauOrdreDigital.Api
+
+Restaurer les dépendances :
+
 dotnet restore
+
+Configurer les variables sensibles avec User Secrets ou des variables d'environnement.
+
+Lancer le backend :
+
 dotnet run
-```
+💻 Installation du Frontend
 
-### Frontend
+Se placer dans le dossier frontend :
 
-```bash
-cd bureau-ordre-frontend
+cd client
+
+Installer les dépendances :
+
 npm install
+
+Lancer le serveur de développement :
+
 npm run dev
-```
+🤖 Installation du microservice IA
 
-## Diagrammes
+Se placer dans le dossier du microservice :
 
-Les diagrammes de conception (cas d'utilisation, séquences, classes, architecture) sont disponibles au format PlantUML dans `/docs/bureau_ordre_diagrammes.puml`.
+cd services-ia/classification
 
-## Statut du projet
+Créer un environnement virtuel :
 
-🚧 En cours de développement — Phase 1 (analyse et conception) complétée.
+python -m venv venv
+
+Sous Windows :
+
+venv\Scripts\activate
+
+Installer les dépendances :
+
+pip install -r requirements.txt
+
+Lancer FastAPI :
+
+uvicorn main:app --reload
+🔌 Communication Backend / IA
+
+Le backend .NET joue le rôle d'intermédiaire entre le frontend et le microservice IA.
+
+Le microservice peut recevoir :
+
+PDF : optionnel
+Description du problème : optionnelle
+
+Le citoyen peut donc :
+
+PDF
+ou
+Description
+ou
+PDF + Description
+
+Le service IA analyse les informations et retourne les suggestions au backend.
+
+Vue.js
+   │
+   │ POST /api/assistant/analyze
+   ▼
+ASP.NET Core
+   │
+   │ HTTP Request
+   ▼
+FastAPI
+   │
+   ├── PDF
+   └── Description
+          │
+          ▼
+       LLM / IA
+          │
+          ▼
+      Analyse
+          │
+          ▼
+     Suggestions
+          │
+          ▼
+ASP.NET Core
+          │
+          ▼
+       Vue.js
+🧠 Évolution de l'IA
+
+Le module IA est conçu pour évoluer progressivement.
+
+Analyse de texte
+Description du citoyen
+        ↓
+      LLM
+        ↓
+Type + Service + Objet + Description
+Analyse de PDF
+PDF
+ ↓
+Extraction du texte
+ ↓
+Analyse IA
+ ↓
+Suggestions
+Analyse combinée
+PDF + Description
+       ↓
+Analyse combinée
+       ↓
+      LLM
+       ↓
+Suggestions
+RAG
+
+Une base documentaire pourra être utilisée pour améliorer les recommandations concernant les services administratifs.
+
+Documents administratifs
+          ↓
+       Embeddings
+          ↓
+        ChromaDB
+          ↓
+Recherche sémantique
+          ↓
+          LLM
+          ↓
+Réponse / recommandation
+📊 Exemple de résultat IA
+
+L'Assistant peut retourner une réponse structurée :
+
+{
+  "typeCourrier": "Demande d'information",
+  "serviceDestinataire": "Service administratif",
+  "objet": "Demande d'informations concernant mon dossier",
+  "description": "Je souhaite obtenir des informations concernant l'état de mon dossier et connaître les démarches nécessaires.",
+  "resume": "La demande concerne le suivi d'un dossier administratif.",
+  "confiance": 0.91
+}
+
+Les informations proposées sont ensuite affichées dans le formulaire de courrier afin que le citoyen puisse les vérifier et les modifier.
+
+📐 Diagrammes
+
+Les diagrammes de conception sont disponibles dans :
+
+/docs/bureau_ordre_diagrammes.puml
+
+Les diagrammes comprennent notamment :
+
+Diagramme de cas d'utilisation
+Diagrammes de séquence
+Diagramme de classes
+Diagramme d'architecture
+Workflow de l'Assistant IA
+
 
 ## Auteur
 
