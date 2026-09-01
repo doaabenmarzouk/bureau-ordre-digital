@@ -265,4 +265,44 @@ public async Task<IActionResult> Logout()
 
     return Ok(new { message = "Déconnecté avec succès" });
 }
+[HttpPost("forgot-password")]
+public async Task<IActionResult> ForgotPassword(ForgotPasswordDto dto)
+{
+    try
+    {
+        await _authService.ForgotPassword(dto);
+
+        return Ok(new
+{
+    message = "Si un compte est associé à cette adresse, un lien de réinitialisation a été envoyé."
+});
+    }
+    catch (InvalidOperationException ex)
+    {
+        return BadRequest(new
+        {
+            message = ex.Message
+        });
+    }
+}
+[HttpPost("reset-password")]
+public async Task<IActionResult> ResetPassword(ResetPasswordDto dto)
+{
+    try
+    {
+        await _authService.ResetPassword(dto);
+
+        return Ok(new
+        {
+            message = "Mot de passe réinitialisé avec succès."
+        });
+    }
+    catch (InvalidOperationException ex)
+    {
+        return BadRequest(new
+        {
+            message = ex.Message
+        });
+    }
+}
 }

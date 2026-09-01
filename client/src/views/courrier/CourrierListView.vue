@@ -75,22 +75,21 @@
 
 
         <!-- ================= ACTION ================= -->
-        <RouterLink
-          to="/courrier/soumettre"
-          class="hidden sm:inline-flex items-center gap-2 bg-amber-400 hover:bg-amber-500 text-slate-950 font-bold px-5 py-3 rounded-xl transition shadow-sm"
-        >
-          <span class="text-lg">+</span>
-          Nouveau courrier
-        </RouterLink>
+        <div class="flex items-center gap-3">
+  <RouterLink to="/courrier/soumettre" class="hidden sm:inline-flex items-center gap-2 bg-amber-400 hover:bg-amber-500 text-slate-950 font-bold px-5 py-3 rounded-xl transition shadow-sm">
+    <span class="text-lg">+</span>
+    Nouveau courrier
+  </RouterLink>
+
+  <button @click="handleLogout" class="text-sm font-medium text-slate-500 hover:text-slate-900 transition">
+    Déconnexion
+  </button>
+</div>
 
       </div>
     </header>
-
-
-    <!-- ================= MAIN ================= -->
     <main class="max-w-7xl mx-auto px-5 lg:px-8 py-10">
 
-      <!-- ================= TITRE ================= -->
       <section class="mb-9">
 
         <div
@@ -130,9 +129,6 @@
         </div>
 
       </section>
-
-
-      <!-- ================= STATISTIQUES ================= -->
       <section class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
 
         <!-- Total -->
@@ -163,9 +159,6 @@
           </p>
 
         </div>
-
-
-        <!-- En cours -->
         <div
           class="bg-white border border-slate-100 rounded-2xl p-5 shadow-[0_4px_20px_rgba(15,23,42,0.04)]"
         >
@@ -193,9 +186,6 @@
           </p>
 
         </div>
-
-
-        <!-- Réponses -->
         <div
           class="bg-white border border-slate-100 rounded-2xl p-5 shadow-[0_4px_20px_rgba(15,23,42,0.04)]"
         >
@@ -223,9 +213,6 @@
           </p>
 
         </div>
-
-
-        <!-- Brouillons -->
         <div
           class="bg-white border border-slate-100 rounded-2xl p-5 shadow-[0_4px_20px_rgba(15,23,42,0.04)]"
         >
@@ -307,9 +294,6 @@
         </div>
 
       </section>
-
-
-      <!-- ================= LOADING ================= -->
       <div
         v-if="loading"
         class="flex flex-col items-center justify-center py-20"
@@ -322,18 +306,6 @@
         </p>
 
       </div>
-
-
-      <!-- ================= ERROR ================= -->
-      <div
-        v-if="error"
-        class="bg-red-50 border border-red-100 text-red-600 rounded-xl px-5 py-4 mb-6 text-sm"
-      >
-        {{ error }}
-      </div>
-
-
-      <!-- ================= LISTE VIDE ================= -->
       <div
         v-if="!loading && filteredCourriers.length === 0"
         class="bg-white border border-dashed border-slate-200 rounded-2xl py-20 text-center"
@@ -375,9 +347,6 @@
         </RouterLink>
 
       </div>
-
-
-      <!-- ================= LISTE ================= -->
       <section
         v-if="!loading && filteredCourriers.length > 0"
         class="space-y-3"
@@ -458,9 +427,6 @@
               </div>
 
             </div>
-
-
-            <!-- Flèche -->
             <div
               class="hidden sm:flex w-9 h-9 rounded-full bg-slate-50 items-center justify-center text-slate-400 group-hover:bg-amber-50 group-hover:text-amber-500 transition shrink-0"
             >
@@ -485,6 +451,13 @@ import { courrierApi } from '@/services/api'
 
 // ================= LOGO =================
 import logo from '@/assets/logo.png'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
+
+const router = useRouter()
+const auth = useAuthStore()
+
+
 
 
 const courriers = ref([])
@@ -493,8 +466,6 @@ const error = ref('')
 const query = ref('')
 const activeFilter = ref('all')
 
-
-// ================= FILTRES =================
 
 const filters = [
   { label: 'Tous', value: 'all' },
@@ -604,8 +575,6 @@ const nombreTraites = computed(() =>
 )
 
 
-// ================= DATE =================
-
 function formatDate(dateStr) {
 
   if (!dateStr) return '—'
@@ -621,8 +590,6 @@ function formatDate(dateStr) {
 
 }
 
-
-// ================= STATUT =================
 
 const STATUS_STYLES = {
 
@@ -658,6 +625,10 @@ function statusClass(statut) {
   return STATUS_STYLES[statut]
     || 'bg-slate-100 text-slate-600'
 
+}
+function handleLogout() {
+  auth.logout()
+  router.push('/')
 }
 </script>
 

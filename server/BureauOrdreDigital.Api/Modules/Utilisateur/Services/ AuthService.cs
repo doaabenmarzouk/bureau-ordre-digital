@@ -108,7 +108,70 @@ await _emailService.SendEmailAsync(utilisateur.Email, "Vérifiez votre adresse e
 
         await _context.SaveChangesAsync();
     }
+    public async Task ForgotPassword(ForgotPasswordDto dto)
+{
+    var utilisateur = await _context.Utilisateurs
+        .FirstOrDefaultAsync(u => u.Email == dto.Email);
 
+    if (utilisateur is null)
+    {
+        return;
+    }
+
+    var token = Guid.NewGuid().ToString("N");
+
+    utilisateur.TokenResetPassword = token;
+    utilisateur.TokenResetExpiration = DateTime.UtcNow.AddMinutes(30);
+
+    await _context.SaveChangesAsync();
+
+    var lien =
+        $"http://localhost:5173/reset-password?token={token}";
+
+    var corps = ConstruireTemplateResetPassword(lien);
+
+    await _emailService.SendEmailAsync(
+        utilisateur.Email,
+        "Réinitialisation de votre mot de passe",
+        corps
+    );
+}
+public async Task ResetPassword(ResetPasswordDto dto)
+{
+    if (dto.NouveauMotDePasse != dto.ConfirmationMotDePasse)
+    {
+        throw new InvalidOperationException(
+            "Les mots de passe ne correspondent pas."
+        );
+    }
+
+    var utilisateur = await _context.Utilisateurs
+        .FirstOrDefaultAsync(
+            u => u.TokenResetPassword == dto.Token
+        );
+
+    if (utilisateur is null)
+    {
+        throw new InvalidOperationException(
+            "Lien de réinitialisation invalide."
+        );
+    }
+
+    if (utilisateur.TokenResetExpiration < DateTime.UtcNow)
+    {
+        throw new InvalidOperationException(
+            "Le lien de réinitialisation a expiré."
+        );
+    }
+
+    utilisateur.MotDePasseHash =
+        BCrypt.Net.BCrypt.HashPassword(dto.NouveauMotDePasse);
+
+    utilisateur.TokenResetPassword = null;
+    utilisateur.TokenResetExpiration = null;
+
+    await _context.SaveChangesAsync();
+}
     private string GenererToken(Models.Utilisateur utilisateur)
     {
         var claims = new List<Claim>
@@ -181,6 +244,106 @@ await _emailService.SendEmailAsync(utilisateur.Email, "Vérifiez votre adresse e
             </p>
 
         </div>
+    </div>
+    """;
+}
+private static string ConstruireTemplateResetPassword(string lien)
+{
+    return $$"""
+    <div style="
+        font-family: Arial, sans-serif;
+        background-color: #f4f6f8;
+        padding: 40px 20px;
+    ">
+
+        <div style="
+            max-width: 560px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            border: 1px solid #e5e7eb;
+        ">
+
+            <h2 style="
+                color: #91a91c;
+                margin-bottom: 20px;
+            ">
+                Bureau d'Ordre Digital
+            </h2>
+
+            <h3 style="
+                color: #111827;
+                font-size: 22px;
+                margin-bottom: 15px;
+            ">
+                Réinitialisation du mot de passe
+            </h3>
+
+            <p style="
+                color: #4b5563;
+                font-size: 15px;
+                line-height: 1.7;
+            ">
+                Vous avez demandé la réinitialisation de votre mot de passe.
+            </p>
+
+            <p style="
+                color: #4b5563;
+                font-size: 15px;
+                line-height: 1.7;
+            ">
+                Cliquez sur le bouton ci-dessous pour créer un nouveau mot de passe.
+            </p>
+
+            <a href="{{lien}}"
+               style="
+                   display: inline-block;
+                   margin: 25px 0;
+                   padding: 14px 30px;
+                   background-color: #1e3a8a;
+                   color: #ffffff;
+                   text-decoration: none;
+                   border-radius: 7px;
+                   font-weight: bold;
+                   font-size: 14px;
+               ">
+                Réinitialiser mon mot de passe
+            </a>
+
+            <p style="
+                color: #6b7280;
+                font-size: 13px;
+                line-height: 1.6;
+            ">
+                Ce lien est valable pendant 30 minutes.
+            </p>
+
+            <p style="
+                color: #9ca3af;
+                font-size: 12px;
+                line-height: 1.6;
+            ">
+                Si vous n'avez pas demandé cette réinitialisation,
+                vous pouvez simplement ignorer cet email.
+            </p>
+
+            <hr style="
+                border: 0;
+                border-top: 1px solid #e5e7eb;
+                margin: 30px 0;
+            ">
+
+            <p style="
+                color: #9ca3af;
+                font-size: 11px;
+            ">
+                © 2026 Bureau d'Ordre Digital
+            </p>
+
+        </div>
+
     </div>
     """;
 }

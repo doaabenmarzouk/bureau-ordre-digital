@@ -1,3 +1,4 @@
+
 <template>
   <div class="min-h-screen bg-white text-slate-900">
 
@@ -54,70 +55,40 @@
             Mes courriers
           </RouterLink>
 
-          <a
-            href="#apropos"
-            class="py-6 text-sm font-medium text-slate-600 transition hover:text-slate-900"
-          >
-            À propos
-          </a>
+          <RouterLink 
+  to="/a-propos"
+  class="py-6 text-sm font-medium text-slate-600 transition hover:text-slate-900"
+>
+  À propos
+</RouterLink>
 
           <a
-            href="#contact"
-            class="py-6 text-sm font-medium text-slate-600 transition hover:text-slate-900"
-          >
-            Contact
-          </a>
+  href="#contact"
+  class="py-6 text-sm font-medium text-slate-600 transition hover:text-slate-900"
+>
+  Contact
+</a>
+         <button @click="setLocale('fr')">FR</button>
+         <button @click="setLocale('ar')">عربي</button>
 
         </nav>
 
         <!-- ================= ACTIONS ================= -->
         <div class="flex items-center gap-3">
-
-          <!-- Connexion -->
-          <RouterLink
-            to="/login"
-            class="hidden items-center gap-2 rounded-xl border border-yellow-300 px-5 py-3 text-sm font-semibold text-slate-800 transition hover:bg-yellow-50 sm:flex"
-          >
-            <svg
-              class="h-4 w-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M15 21v-2a4 4 0 00-4-4H7a4 4 0 00-4 4v2m8-10a4 4 0 100-8 4 4 0 000 8zm6 3v6m3-3h-6"
-              />
-            </svg>
-
-            Se connecter
-          </RouterLink>
-
-          <!-- Inscription -->
-          <RouterLink
-            to="/register"
-            class="flex items-center gap-2 rounded-xl bg-yellow-400 px-5 py-3 text-sm font-bold text-slate-900 shadow-sm transition hover:bg-yellow-500 hover:shadow-md"
-          >
-            <svg
-              class="h-4 w-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2m6-10a4 4 0 100-8 4 4 0 000 8zm10 3v6m3-3h-6"
-              />
-            </svg>
-
-            Créer un compte
-          </RouterLink>
-
-        </div>
+  <template v-if="!auth.isAuthenticated">
+    <RouterLink to="/login" class="hidden items-center gap-2 rounded-xl border border-yellow-300 px-5 py-3 text-sm font-semibold text-slate-800 transition hover:bg-yellow-50 sm:flex">
+      Se connecter
+    </RouterLink>
+    <RouterLink to="/register" class="flex items-center gap-2 rounded-xl bg-yellow-400 px-5 py-3 text-sm font-bold text-slate-900 shadow-sm transition hover:bg-yellow-500 hover:shadow-md">
+      Créer un compte
+    </RouterLink>
+  </template>
+  <button v-else @click="handleLogout" class="flex items-center gap-2 rounded-xl border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
+    Déconnexion
+  </button>
+</div>
+           
+          
       </div>
     </header>
 
@@ -893,7 +864,6 @@
 
             </div>
 
-
             <!-- STEP 3 -->
             <div
               class="relative text-center md:text-left"
@@ -929,10 +899,7 @@
               </div>
 
             </div>
-
           </div>
-
-
           <div class="mt-12 text-center">
 
             <RouterLink
@@ -1029,4 +996,15 @@
 <!-- ================= SCRIPT ================= -->
 <script setup>
 import logo from '@/assets/logo.png'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
+
+const router = useRouter()
+const auth = useAuthStore()
+
+function handleLogout() {
+  auth.logout()
+  router.push('/')
+}
+
 </script>

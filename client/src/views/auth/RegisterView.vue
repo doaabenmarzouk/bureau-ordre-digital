@@ -1,7 +1,7 @@
 <!-- client/src/views/auth/RegisterView.vue -->
 
 <template>
-  <div class="min-h-screen bg-[#F7F7F5] flex items-center justify-center px-4 py-10">
+  <div class="min-h-screen bg-[#F7F7F5] flex items-center justify-center px-4 py-8">
 
     <div class="w-full max-w-md">
 
@@ -14,9 +14,8 @@
         />
       </div>
 
-      <!-- Formulaire d'inscription -->
+      <!-- Card -->
       <div
-        v-if="!submitted"
         class="bg-white border border-gray-200 rounded-2xl p-7
                shadow-[0_8px_30px_rgba(0,0,0,0.04)]"
       >
@@ -24,72 +23,81 @@
         <!-- Header -->
         <div class="mb-7">
           <h1 class="text-xl font-semibold tracking-tight text-[#171717]">
-            Créer mon compte
+            Créer un compte
           </h1>
 
           <p class="text-sm text-gray-500 mt-1.5">
-            Quelques informations pour démarrer.
+            Créez votre espace citoyen.
           </p>
         </div>
 
         <!-- Form -->
         <form @submit.prevent="onSubmit">
 
-          <!-- Prénom / Nom -->
-          <div class="grid grid-cols-2 gap-3 mb-5">
+          <!-- Nom -->
+          <div class="mb-4">
+            <label
+              for="nom"
+              class="block text-sm font-medium text-gray-700 mb-2"
+            >
+              Nom
+            </label>
 
-            <div>
-              <label
-                for="prenom"
-                class="block text-sm font-medium text-gray-700 mb-2"
-              >
-                Prénom
-              </label>
+            <input
+              id="nom"
+              v-model="nom"
+              type="text"
+              required
+              autocomplete="family-name"
+              placeholder="Votre nom"
+              class="w-full h-11
+                     border border-gray-300
+                     rounded-lg
+                     px-3.5
+                     text-sm
+                     text-gray-800
+                     placeholder:text-gray-400
+                     outline-none
+                     transition
+                     focus:border-[#F5B942]
+                     focus:ring-2
+                     focus:ring-[#F5B942]/20"
+            />
+          </div>
 
-              <input
-                id="prenom"
-                v-model="form.prenom"
-                type="text"
-                required
-                autocomplete="given-name"
-                placeholder="Prénom"
-                class="w-full h-11 border border-gray-300 rounded-lg px-3.5
-                       text-sm text-gray-800
-                       placeholder:text-gray-400
-                       outline-none transition
-                       focus:border-[#F5B942]
-                       focus:ring-2 focus:ring-[#F5B942]/20"
-              />
-            </div>
+          <!-- Prénom -->
+          <div class="mb-4">
+            <label
+              for="prenom"
+              class="block text-sm font-medium text-gray-700 mb-2"
+            >
+              Prénom
+            </label>
 
-            <div>
-              <label
-                for="nom"
-                class="block text-sm font-medium text-gray-700 mb-2"
-              >
-                Nom
-              </label>
-
-              <input
-                id="nom"
-                v-model="form.nom"
-                type="text"
-                required
-                autocomplete="family-name"
-                placeholder="Nom"
-                class="w-full h-11 border border-gray-300 rounded-lg px-3.5
-                       text-sm text-gray-800
-                       placeholder:text-gray-400
-                       outline-none transition
-                       focus:border-[#F5B942]
-                       focus:ring-2 focus:ring-[#F5B942]/20"
-              />
-            </div>
-
+            <input
+              id="prenom"
+              v-model="prenom"
+              type="text"
+              required
+              autocomplete="given-name"
+              placeholder="Votre prénom"
+              class="w-full h-11
+                     border border-gray-300
+                     rounded-lg
+                     px-3.5
+                     text-sm
+                     text-gray-800
+                     placeholder:text-gray-400
+                     outline-none
+                     transition
+                     focus:border-[#F5B942]
+                     focus:ring-2
+                     focus:ring-[#F5B942]/20"
+            />
           </div>
 
           <!-- Email -->
-          <div class="mb-5">
+          <div class="mb-4">
             <label
               for="email"
               class="block text-sm font-medium text-gray-700 mb-2"
@@ -99,22 +107,28 @@
 
             <input
               id="email"
-              v-model="form.email"
+              v-model="email"
               type="email"
               required
               autocomplete="email"
               placeholder="exemple@email.com"
-              class="w-full h-11 border border-gray-300 rounded-lg px-3.5
-                     text-sm text-gray-800
+              class="w-full h-11
+                     border border-gray-300
+                     rounded-lg
+                     px-3.5
+                     text-sm
+                     text-gray-800
                      placeholder:text-gray-400
-                     outline-none transition
+                     outline-none
+                     transition
                      focus:border-[#F5B942]
-                     focus:ring-2 focus:ring-[#F5B942]/20"
+                     focus:ring-2
+                     focus:ring-[#F5B942]/20"
             />
           </div>
 
           <!-- Téléphone -->
-          <div class="mb-5">
+          <div class="mb-4">
             <label
               for="telephone"
               class="block text-sm font-medium text-gray-700 mb-2"
@@ -124,22 +138,27 @@
 
             <input
               id="telephone"
-              v-model="form.telephone"
+              v-model="telephone"
               type="tel"
-              required
               autocomplete="tel"
-              placeholder="+216 XX XXX XXX"
-              class="w-full h-11 border border-gray-300 rounded-lg px-3.5
-                     text-sm text-gray-800
+              placeholder="Votre numéro de téléphone"
+              class="w-full h-11
+                     border border-gray-300
+                     rounded-lg
+                     px-3.5
+                     text-sm
+                     text-gray-800
                      placeholder:text-gray-400
-                     outline-none transition
+                     outline-none
+                     transition
                      focus:border-[#F5B942]
-                     focus:ring-2 focus:ring-[#F5B942]/20"
+                     focus:ring-2
+                     focus:ring-[#F5B942]/20"
             />
           </div>
 
           <!-- Mot de passe -->
-          <div class="mb-5">
+          <div class="mb-4">
             <label
               for="password"
               class="block text-sm font-medium text-gray-700 mb-2"
@@ -147,80 +166,157 @@
               Mot de passe
             </label>
 
-            <input
-              id="password"
-              v-model="form.motDePasse"
-              type="password"
-              required
-              minlength="8"
-              autocomplete="new-password"
-              placeholder="Votre mot de passe"
-              class="w-full h-11 border border-gray-300 rounded-lg px-3.5
-                     text-sm text-gray-800
-                     placeholder:text-gray-400
-                     outline-none transition
-                     focus:border-[#F5B942]
-                     focus:ring-2 focus:ring-[#F5B942]/20"
-            />
+            <div class="relative">
 
-            <p class="text-xs text-gray-400 mt-1.5">
-              Au moins 8 caractères.
-            </p>
+              <input
+                id="password"
+                v-model="motDePasse"
+                :type="afficherMotDePasse ? 'text' : 'password'"
+                required
+                minlength="6"
+                autocomplete="new-password"
+                placeholder="Votre mot de passe"
+                class="w-full h-11
+                       border border-gray-300
+                       rounded-lg
+                       px-3.5
+                       pr-11
+                       text-sm
+                       text-gray-800
+                       placeholder:text-gray-400
+                       outline-none
+                       transition
+                       focus:border-[#F5B942]
+                       focus:ring-2
+                       focus:ring-[#F5B942]/20"
+              />
+
+              <button
+                type="button"
+                @click="afficherMotDePasse = !afficherMotDePasse"
+                :aria-label="
+                  afficherMotDePasse
+                    ? 'Masquer le mot de passe'
+                    : 'Afficher le mot de passe'
+                "
+                class="absolute
+                       right-3
+                       top-1/2
+                       -translate-y-1/2
+                       text-gray-400
+                       hover:text-[#A87500]
+                       transition"
+              >
+                <EyeOff
+                  v-if="afficherMotDePasse"
+                  class="w-5 h-5"
+                />
+
+                <Eye
+                  v-else
+                  class="w-5 h-5"
+                />
+              </button>
+
+            </div>
           </div>
 
-          <!-- Confirmation -->
+          <!-- Confirmation mot de passe -->
           <div class="mb-5">
             <label
-              for="confirmation"
+              for="confirmPassword"
               class="block text-sm font-medium text-gray-700 mb-2"
             >
               Confirmer le mot de passe
             </label>
 
-            <input
-              id="confirmation"
-              v-model="form.confirmation"
-              type="password"
-              required
-              autocomplete="new-password"
-              placeholder="Confirmez votre mot de passe"
-              class="w-full h-11 border border-gray-300 rounded-lg px-3.5
-                     text-sm text-gray-800
-                     placeholder:text-gray-400
-                     outline-none transition
-                     focus:border-[#F5B942]
-                     focus:ring-2 focus:ring-[#F5B942]/20"
-            />
+            <div class="relative">
+
+              <input
+                id="confirmPassword"
+                v-model="confirmationMotDePasse"
+                :type="
+                  afficherConfirmation
+                    ? 'text'
+                    : 'password'
+                "
+                required
+                minlength="6"
+                autocomplete="new-password"
+                placeholder="Confirmer votre mot de passe"
+                class="w-full h-11
+                       border border-gray-300
+                       rounded-lg
+                       px-3.5
+                       pr-11
+                       text-sm
+                       text-gray-800
+                       placeholder:text-gray-400
+                       outline-none
+                       transition
+                       focus:border-[#F5B942]
+                       focus:ring-2
+                       focus:ring-[#F5B942]/20"
+              />
+
+              <button
+                type="button"
+                @click="afficherConfirmation = !afficherConfirmation"
+                :aria-label="
+                  afficherConfirmation
+                    ? 'Masquer la confirmation'
+                    : 'Afficher la confirmation'
+                "
+                class="absolute
+                       right-3
+                       top-1/2
+                       -translate-y-1/2
+                       text-gray-400
+                       hover:text-[#A87500]
+                       transition"
+              >
+                <EyeOff
+                  v-if="afficherConfirmation"
+                  class="w-5 h-5"
+                />
+
+                <Eye
+                  v-else
+                  class="w-5 h-5"
+                />
+              </button>
+
+            </div>
           </div>
 
-          <!-- Conditions -->
-          <label
-            class="flex items-start gap-2.5 mb-5 text-xs text-gray-600 cursor-pointer"
-          >
-            <input
-              v-model="form.accepteConditions"
-              type="checkbox"
-              required
-              class="mt-0.5 w-4 h-4 accent-[#F5B942]"
-            />
-
-            <span class="leading-5">
-              J'accepte les
-              <span class="font-medium text-[#A87500] underline">
-                conditions d'utilisation
-              </span>
-              et la politique de confidentialité.
-            </span>
-          </label>
-
-          <!-- Error -->
+          <!-- Erreur -->
           <div
             v-if="error"
-            class="text-sm text-red-700 bg-red-50
-                   border border-red-200 rounded-lg
-                   px-3.5 py-3 mb-5"
+            class="text-sm
+                   text-red-700
+                   bg-red-50
+                   border border-red-200
+                   rounded-lg
+                   px-3.5
+                   py-3
+                   mb-5"
           >
             {{ error }}
+          </div>
+
+          <!-- Succès -->
+          <div
+            v-if="message"
+            class="text-sm
+                   text-[#7A5A00]
+                   bg-[#FFF8E6]
+                   border border-[#F5B942]/40
+                   rounded-lg
+                   px-3.5
+                   py-3
+                   mb-5"
+          >
+            {{ message }}
           </div>
 
           <!-- Submit -->
@@ -240,13 +336,14 @@
                    disabled:opacity-60
                    disabled:cursor-not-allowed"
           >
-            {{ loading ? 'Création en cours...' : 'Créer mon compte' }}
+            {{ loading ? 'Création du compte...' : 'Créer mon compte' }}
           </button>
 
         </form>
 
         <!-- Separator -->
         <div class="relative my-6">
+
           <div class="absolute inset-0 flex items-center">
             <div class="w-full border-t border-gray-200"></div>
           </div>
@@ -256,72 +353,28 @@
               ou
             </span>
           </div>
+
         </div>
 
         <!-- Login -->
         <p class="text-sm text-gray-500 text-center">
-          Déjà un compte ?
+
+          Vous avez déjà un compte ?
 
           <RouterLink
             to="/login"
-            class="ml-1 font-semibold text-[#A87500]
+            class="ml-1
+                   font-semibold
+                   text-[#A87500]
                    hover:text-[#7F5900]
-                   underline underline-offset-2
+                   underline
+                   underline-offset-2
                    transition"
           >
             Se connecter
           </RouterLink>
+
         </p>
-
-      </div>
-
-      <!-- Confirmation -->
-      <div
-        v-else
-        class="bg-white border border-gray-200 rounded-2xl p-7
-               text-center
-               shadow-[0_8px_30px_rgba(0,0,0,0.04)]"
-      >
-
-        <!-- Icon -->
-        <div
-          class="w-14 h-14 rounded-full
-                 bg-[#FFF4D6]
-                 flex items-center justify-center
-                 text-2xl mx-auto mb-5"
-        >
-          ✉️
-        </div>
-
-        <h2 class="text-xl font-semibold tracking-tight text-[#171717] mb-2">
-          Vérifiez votre boîte mail
-        </h2>
-
-        <p class="text-sm text-gray-500 leading-6 mb-6">
-          Un lien de confirmation a été envoyé à
-
-          <span class="font-medium text-[#171717]">
-            {{ form.email }}
-          </span>.
-
-          Cliquez dessus pour activer votre compte.
-        </p>
-
-        <RouterLink
-          to="/login"
-          class="inline-flex items-center justify-center
-                 w-full h-11
-                 bg-[#F5B942]
-                 hover:bg-[#E9AA2F]
-                 text-[#171717]
-                 font-semibold
-                 rounded-lg
-                 text-sm
-                 transition
-                 shadow-sm"
-        >
-          Retour à la connexion
-        </RouterLink>
 
       </div>
 
@@ -331,76 +384,93 @@
       </p>
 
     </div>
+
   </div>
 </template>
 
+
 <script setup>
-import { ref, reactive } from 'vue'
-import { useAuthStore } from '@/stores/auth'
+
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { Eye, EyeOff } from 'lucide-vue-next'
+import { authApi } from '@/services/api'
 
 import logo from '@/assets/logo.png'
 
-const auth = useAuthStore()
 
-const form = reactive({
-  prenom: '',
-  nom: '',
-  email: '',
-  telephone: '',
-  motDePasse: '',
-  confirmation: '',
-  accepteConditions: false
-})
+const router = useRouter()
 
-const error = ref('')
+
+// Champs
+const nom = ref('')
+const prenom = ref('')
+const email = ref('')
+const telephone = ref('')
+
+const motDePasse = ref('')
+const confirmationMotDePasse = ref('')
+
+
+// Affichage des mots de passe
+const afficherMotDePasse = ref(false)
+const afficherConfirmation = ref(false)
+
+
+// État
 const loading = ref(false)
-const submitted = ref(false)
+const message = ref('')
+const error = ref('')
 
-function isValidEmail(email) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-}
 
 async function onSubmit() {
+
+  message.value = ''
   error.value = ''
 
-  if (!isValidEmail(form.email)) {
-    error.value = 'Merci de saisir une adresse e-mail valide.'
-    return
-  }
-
-  if (form.motDePasse.length < 8) {
-    error.value = 'Le mot de passe doit contenir au moins 8 caractères.'
-    return
-  }
-
-  if (form.motDePasse !== form.confirmation) {
+  // Vérification mot de passe
+  if (motDePasse.value !== confirmationMotDePasse.value) {
     error.value = 'Les mots de passe ne correspondent pas.'
     return
   }
 
-  if (!form.accepteConditions) {
-    error.value = "Vous devez accepter les conditions d'utilisation."
+  if (motDePasse.value.length < 6) {
+    error.value = 'Le mot de passe doit contenir au moins 6 caractères.'
     return
   }
 
   loading.value = true
 
   try {
-    await auth.register({
-      prenom: form.prenom,
-      nom: form.nom,
-      email: form.email,
-      telephone: form.telephone,
-      motDePasse: form.motDePasse
+
+    const response = await authApi.register({
+      nom: nom.value,
+      prenom: prenom.value,
+      email: email.value,
+      telephone: telephone.value,
+      motDePasse: motDePasse.value,
+      confirmationMotDePasse: confirmationMotDePasse.value
     })
 
-    submitted.value = true
+    message.value =
+      response.message ||
+      'Compte créé. Vérifiez votre adresse e-mail pour activer votre compte.'
+
+    // Nettoyer les champs
+    motDePasse.value = ''
+    confirmationMotDePasse.value = ''
 
   } catch (e) {
+
     error.value =
-      e.message || 'Impossible de créer le compte. Réessayez.'
+      e?.message ||
+      'Impossible de créer le compte.'
+
   } finally {
+
     loading.value = false
+
   }
 }
+
 </script>

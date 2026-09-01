@@ -1,0 +1,59 @@
+{
+  "app": {
+    "title": "مكتب الضبط الرقمي"
+  },
+  "nav": {
+    "accueil": "الرئيسية",
+    "mesCourriers": "مراسلاتي",
+    "nouvelleDemande": "طلب جديد",
+    "profil": "ملفي الشخصي",
+    "deconnexion": "تسجيل الخروج",
+     "aPropos": "من نحن",
+  "contact": "اتصل بنا"
+  },
+  "auth": {
+    "connexion": "تسجيل الدخول",
+    "inscription": "إنشاء حساب",
+    "email": "البريد الإلكتروني",
+    "motDePasse": "كلمة المرور",
+    "nom": "اللقب",
+    "prenom": "الاسم",
+    "telephone": "الهاتف",
+    "pasDeCompte": "ليس لديك حساب؟",
+    "dejaInscrit": "لديك حساب بالفعل؟",
+    "verifierEmail": "تحقق من بريدك الإلكتروني",
+    "lienEnvoye": "تم إرسال رابط التأكيد إلى عنوان بريدك الإلكتروني."
+  },
+  "courrier": {
+    "nouvelleDemande": "طلب جديد",
+    "sousTitre": "قدّم مراسلتك إلى الجهة المعنية.",
+    "etapeDestinataire": "الجهة المرسل إليها",
+    "etapeContenu": "طلبكم",
+    "etapeVerification": "التحقق",
+    "etapeConfirmation": "التأكيد",
+    "choisirDestinataire": "اختر الجهة المرسل إليها",
+    "rechercherOrganisme": "ابحث عن هيئة أو خدمة أو مدينة...",
+    "filtrerVille": "التصفية حسب المدينة",
+    "typeCourrier": "نوع المراسلة",
+    "objet": "موضوع المراسلة",
+    "description": "وصف طلبكم",
+    "piecesJointes": "المرفقات",
+    "continuer": "متابعة",
+    "retour": "رجوع",
+    "envoyer": "إرسال المراسلة",
+    "courrierEnvoye": "تم إرسال المراسلة بنجاح",
+    "numeroReference": "الرقم المرجعي"
+  },
+  "suivi": {
+    "titre": "مراسلاتي",
+    "sousTitre": "اطّلع على سجل وحالة جميع مراسلاتك المرسلة.",
+    "rechercher": "البحث حسب الموضوع...",
+    "aucunResultat": "لم يتم العثور على أي مراسلة"
+  },
+  "commun": {
+    "chargement": "جارٍ التحميل...",
+    "erreur": "حدث خطأ.",
+    "modifier": "تعديل",
+    "enregistrer": "حفظ"
+  }
+}

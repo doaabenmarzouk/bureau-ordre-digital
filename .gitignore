@@ -1,6 +1,7 @@
 # Front-end (Vue.js)
 client/node_modules/
 client/dist/
+node_modules/
 
 # Back-end (.NET)
 server/**/bin/

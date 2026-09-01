@@ -37,7 +37,11 @@
       <!-- ÉTAPE 1 -->
       <CourrierStep1Destinataire
         v-if="currentStep === 1"
-        v-model:selected-service="selectedService"
+        :services="services"
+        :loading="loadingServices"
+        :error="error"
+        :selected-service="selectedService"
+        @select="selectedService = $event"
         @continue="goToStep2"
       />
 
@@ -79,7 +83,8 @@ import { useRouter } from 'vue-router'
 
 import {
   typeCourrierApi,
-  courrierApi
+  courrierApi,
+  organismesApi
 } from '@/services/api'
 
 import CourrierStepper from '@/components/courrier/CourrierStepper.vue'
@@ -97,6 +102,9 @@ const router = useRouter()
 const currentStep = ref(1)
 
 const selectedService = ref(null)
+
+const services = ref([])
+const loadingServices = ref(false)
 
 const typesCourrier = ref([])
 
@@ -124,6 +132,35 @@ const selectedTypeCourrier = computed(() => {
     type => String(type.id) === String(form.value.typeCourrierId)
   ) || null
 })
+
+// --------------------------------------------------
+// CHARGER LES SERVICES DESTINATAIRES
+// --------------------------------------------------
+
+async function loadServices() {
+  loadingServices.value = true
+  try {
+    error.value = ''
+
+    const data = await organismesApi.list()
+
+    console.log('Services destinataires reçus :', data)
+
+    services.value = Array.isArray(data) ? data : []
+
+    if (services.value.length === 0) {
+      error.value = 'Aucun organisme disponible.'
+    }
+  } catch (err) {
+    console.error('Erreur chargement services destinataires :', err)
+
+    error.value =
+      err.message ||
+      'Impossible de charger les organismes destinataires.'
+  } finally {
+    loadingServices.value = false
+  }
+}
 
 // --------------------------------------------------
 // CHARGER LES TYPES
@@ -243,5 +280,6 @@ function goToCourriers() {
 
 onMounted(() => {
   loadTypesCourrier()
+  loadServices()
 })
 </script>

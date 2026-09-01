@@ -5,17 +5,31 @@ import { useAuthStore } from '@/stores/auth'
 
 const routes = [
   // =========================
-  // ACCUEIL
+  // PUBLIC
   // =========================
+
   {
     path: '/',
     name: 'landing',
     component: () => import('@/views/LandingView.vue')
   },
 
+  {
+    path: '/a-propos',
+    name: 'a-propos',
+    component: () => import('@/views/AboutView.vue')
+  },
+
+  {
+    path: '/contact',
+    name: 'contact',
+    component: () => import('@/views/ContactView.vue')
+  },
+
   // =========================
   // AUTHENTIFICATION
   // =========================
+
   {
     path: '/login',
     name: 'login',
@@ -28,13 +42,27 @@ const routes = [
     component: () => import('@/views/auth/RegisterView.vue')
   },
 
+  {
+    path: '/mot-de-passe-oublie',
+    name: 'mot-de-passe-oublie',
+    component: () => import('@/views/auth/ForgotPasswordView.vue')
+  },
+
+  {
+    path: '/reset-password',
+    name: 'reset-password',
+    component: () => import('@/views/auth/ResetPasswordView.vue')
+  },
+
   // =========================
-  // COURRIER
+  // COURRIER - PROTÉGÉ
   // =========================
+
   {
     path: '/courrier',
     name: 'courrier-list',
     component: () => import('@/views/courrier/CourrierListView.vue'),
+
     meta: {
       requiresAuth: true
     }
@@ -43,18 +71,21 @@ const routes = [
   {
     path: '/courrier/nouvelle-demande',
     name: 'NouvelleDemande',
-    component: () => import('@/views/Courrier/NouvelleDemande.vue'),
+    component: () => import('@/views/courrier/NouvelleDemande.vue'),
+
     meta: {
       requiresAuth: true
     }
   },
 
-  // Ancienne URL utilisée par certains boutons
-  // On la redirige vers la nouvelle route
   {
     path: '/courrier/soumettre',
     redirect: {
       name: 'NouvelleDemande'
+    },
+
+    meta: {
+      requiresAuth: true
     }
   }
 ]
@@ -65,26 +96,35 @@ const router = createRouter({
 })
 
 // =========================
-// NAVIGATION GUARD
+// AUTHENTIFICATION GUARD
 // =========================
 
 router.beforeEach((to) => {
-  const auth = useAuthStore()
+  const auth = useAuthStore();
+
+  console.log("➡️ Navigation vers :", to.fullPath);
+  console.log("🔐 Token :", auth.token);
+  console.log("🔐 Authentifié :", auth.isAuthenticated);
+  console.log("🛡️ requiresAuth :", to.meta.requiresAuth);
 
   if (to.meta.requiresAuth && !auth.isAuthenticated) {
+    console.log("❌ Accès refusé → redirection Login");
+
     return {
-      name: 'login',
+      name: "login",
       query: {
-        redirect: to.fullPath
-      }
-    }
+        redirect: to.fullPath,
+      },
+    };
   }
 
-  return true
-})
+  console.log("✅ Accès autorisé");
+
+  return true;
+});
 
 // =========================
-// GESTION DES ERREURS
+// ERREURS
 // =========================
 
 router.onError((error) => {

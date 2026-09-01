@@ -1,0 +1,59 @@
+{
+  "app": {
+    "title": "Bureau d'Ordre Digital"
+  },
+  "nav": {
+    "accueil": "Accueil",
+    "mesCourriers": "Mes courriers",
+    "nouvelleDemande": "Nouvelle demande",
+    "profil": "Mon profil",
+    "deconnexion": "Déconnexion",
+     "aPropos": "À propos",
+     "contact": "Contact"
+  },
+  "auth": {
+    "connexion": "Se connecter",
+    "inscription": "Créer un compte",
+    "email": "Adresse email",
+    "motDePasse": "Mot de passe",
+    "nom": "Nom",
+    "prenom": "Prénom",
+    "telephone": "Téléphone",
+    "pasDeCompte": "Pas encore de compte ?",
+    "dejaInscrit": "Déjà inscrit ?",
+    "verifierEmail": "Vérifiez votre email",
+    "lienEnvoye": "Un lien de confirmation a été envoyé à votre adresse email."
+  },
+  "courrier": {
+    "nouvelleDemande": "Nouvelle demande",
+    "sousTitre": "Soumettez votre courrier à l'organisme concerné.",
+    "etapeDestinataire": "Destinataire",
+    "etapeContenu": "Votre demande",
+    "etapeVerification": "Vérification",
+    "etapeConfirmation": "Confirmation",
+    "choisirDestinataire": "Choisissez votre destinataire",
+    "rechercherOrganisme": "Rechercher un organisme, un service ou une ville...",
+    "filtrerVille": "Filtrer par ville",
+    "typeCourrier": "Type de courrier",
+    "objet": "Objet du courrier",
+    "description": "Description de votre demande",
+    "piecesJointes": "Pièces jointes",
+    "continuer": "Continuer",
+    "retour": "Retour",
+    "envoyer": "Envoyer le courrier",
+    "courrierEnvoye": "Courrier envoyé avec succès",
+    "numeroReference": "Numéro de référence"
+  },
+  "suivi": {
+    "titre": "Mes courriers",
+    "sousTitre": "Consultez l'historique et le statut de tous vos courriers soumis.",
+    "rechercher": "Rechercher par objet...",
+    "aucunResultat": "Aucun courrier trouvé"
+  },
+  "commun": {
+    "chargement": "Chargement...",
+    "erreur": "Une erreur est survenue.",
+    "modifier": "Modifier",
+    "enregistrer": "Enregistrer"
+  }
+}

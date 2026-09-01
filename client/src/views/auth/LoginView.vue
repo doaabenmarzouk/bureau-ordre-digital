@@ -49,19 +49,26 @@
               type="email"
               required
               autocomplete="email"
-              placeholder="exemple@email.com"
-              class="w-full h-11 border border-gray-300 rounded-lg px-3.5
-                     text-sm text-gray-800
+              placeholder="Votre adresse e-mail"
+              class="w-full h-11
+                     border border-gray-300
+                     rounded-lg
+                     px-3.5
+                     text-sm
+                     text-gray-800
                      placeholder:text-gray-400
                      outline-none
                      transition
                      focus:border-[#F5B942]
-                     focus:ring-2 focus:ring-[#F5B942]/20"
+                     focus:ring-2
+                     focus:ring-[#F5B942]/20"
             />
           </div>
 
+
           <!-- Password -->
           <div class="mb-2">
+
             <label
               for="password"
               class="block text-sm font-medium text-gray-700 mb-2"
@@ -69,49 +76,104 @@
               Mot de passe
             </label>
 
-            <input
-              id="password"
-              v-model="password"
-              type="password"
-              required
-              autocomplete="current-password"
-              placeholder="Votre mot de passe"
-              class="w-full h-11 border border-gray-300 rounded-lg px-3.5
-                     text-sm text-gray-800
-                     placeholder:text-gray-400
-                     outline-none
-                     transition
-                     focus:border-[#F5B942]
-                     focus:ring-2 focus:ring-[#F5B942]/20"
-            />
+            <!-- Password + Eye -->
+            <div class="relative">
+
+              <input
+                id="password"
+                v-model="password"
+                :type="afficherMotDePasse ? 'text' : 'password'"
+                required
+                autocomplete="current-password"
+                placeholder="Votre mot de passe"
+                class="w-full h-11
+                       border border-gray-300
+                       rounded-lg
+                       px-3.5
+                       pr-11
+                       text-sm
+                       text-gray-800
+                       placeholder:text-gray-400
+                       outline-none
+                       transition
+                       focus:border-[#F5B942]
+                       focus:ring-2
+                       focus:ring-[#F5B942]/20"
+              />
+
+              <!-- Eye button -->
+              <button
+                type="button"
+                @click="afficherMotDePasse = !afficherMotDePasse"
+                :aria-label="
+                  afficherMotDePasse
+                    ? 'Masquer le mot de passe'
+                    : 'Afficher le mot de passe'
+                "
+                class="absolute
+                       right-3
+                       top-1/2
+                       -translate-y-1/2
+                       text-gray-400
+                       hover:text-[#A87500]
+                       transition"
+              >
+
+                <EyeOff
+                  v-if="afficherMotDePasse"
+                  class="w-5 h-5"
+                />
+
+                <Eye
+                  v-else
+                  class="w-5 h-5"
+                />
+
+              </button>
+
+            </div>
           </div>
+
 
           <!-- Forgot password -->
           <div class="flex justify-end mb-5">
+
             <RouterLink
               to="/mot-de-passe-oublie"
-              class="text-xs font-medium text-[#A87500]
-                     hover:text-[#7F5900] transition"
+              class="text-xs
+                     font-medium
+                     text-[#A87500]
+                     hover:text-[#7F5900]
+                     transition"
             >
               Mot de passe oublié ?
             </RouterLink>
+
           </div>
+
 
           <!-- Error -->
           <div
             v-if="error"
-            class="text-sm text-red-700 bg-red-50
-                   border border-red-200 rounded-lg
-                   px-3.5 py-3 mb-5"
+            class="text-sm
+                   text-red-700
+                   bg-red-50
+                   border border-red-200
+                   rounded-lg
+                   px-3.5
+                   py-3
+                   mb-5"
           >
             {{ error }}
           </div>
+
 
           <!-- Submit -->
           <button
             type="submit"
             :disabled="loading"
-            class="w-full h-11
+            class="w-full
+                   h-11
                    bg-[#F5B942]
                    hover:bg-[#E9AA2F]
                    active:bg-[#D99A20]
@@ -129,35 +191,47 @@
 
         </form>
 
+
         <!-- Separator -->
         <div class="relative my-6">
+
           <div class="absolute inset-0 flex items-center">
             <div class="w-full border-t border-gray-200"></div>
           </div>
 
           <div class="relative flex justify-center">
+
             <span class="bg-white px-3 text-xs text-gray-400">
               ou
             </span>
+
           </div>
+
         </div>
+
 
         <!-- Register -->
         <p class="text-sm text-gray-500 text-center">
+
           Pas encore de compte ?
 
           <RouterLink
             to="/register"
-            class="ml-1 font-semibold text-[#A87500]
+            class="ml-1
+                   font-semibold
+                   text-[#A87500]
                    hover:text-[#7F5900]
-                   underline underline-offset-2
+                   underline
+                   underline-offset-2
                    transition"
           >
             Créer un compte
           </RouterLink>
+
         </p>
 
       </div>
+
 
       <!-- Footer -->
       <p class="text-xs text-gray-400 text-center mt-6">
@@ -165,43 +239,61 @@
       </p>
 
     </div>
+
   </div>
 </template>
 
+
 <script setup>
+
 import { ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import { Eye, EyeOff } from 'lucide-vue-next'
 
 // Logo
 import logo from '@/assets/logo.png'
 
+
 const router = useRouter()
 const route = useRoute()
 const auth = useAuthStore()
+
 
 const email = ref('')
 const password = ref('')
 const error = ref('')
 const loading = ref(false)
 
+const afficherMotDePasse = ref(false)
+
+
 async function onSubmit() {
+
   error.value = ''
   loading.value = true
 
   try {
+
     await auth.login({
-     email: email.value,
-     motDePasse: password.value
-})
+      email: email.value,
+      motDePasse: password.value
+    })
 
     router.push(
       route.query.redirect || { name: 'landing' }
     )
+
   } catch (e) {
-    error.value = e.message || 'Connexion impossible.'
+
+    error.value =
+      e.message || 'Connexion impossible.'
+
   } finally {
+
     loading.value = false
+
   }
 }
+
 </script>
