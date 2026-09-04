@@ -84,12 +84,13 @@ await _emailService.SendEmailAsync(utilisateur.Email, "Vérifiez votre adresse e
         var token = GenererToken(utilisateur);
 
         return new LoginResponseDto
-        {
-            Id = utilisateur.Id,
-            Nom = utilisateur.Nom,
-            Prenom = utilisateur.Prenom,
-            Email = utilisateur.Email,
-            Token = token
+{
+               Id = utilisateur.Id,
+               Nom = utilisateur.Nom,
+               Prenom = utilisateur.Prenom,
+               Email = utilisateur.Email,
+               Telephone = utilisateur.Telephone,
+               Token = token
         };
     }
 

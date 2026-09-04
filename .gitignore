@@ -7,6 +7,13 @@ node_modules/
 server/**/bin/
 server/**/obj/
 
+# AI Service (Python)
+ai-service/venv/
+ai-service/.venv/
+ai-service/__pycache__/
+ai-service/**/*.pyc
+ai-service/chroma_db/
+
 # Général
 .vscode/
 *.env

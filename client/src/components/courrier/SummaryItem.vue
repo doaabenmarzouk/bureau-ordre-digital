@@ -1,28 +1,29 @@
 <template>
 
   <div
-    class="pb-6
-           border-b
-           border-slate-100"
+    class="pb-6 border-b border-slate-100"
   >
 
-    <p class="summary-label">
+    <!-- LABEL -->
+    <p
+      class="summary-label"
+    >
       {{ label }}
     </p>
 
+
+    <!-- VALEUR -->
     <p
-      class="text-sm
-             font-bold
-             text-slate-800"
+      class="text-sm font-bold text-slate-800 break-words"
     >
       {{ value || '—' }}
     </p>
 
+
+    <!-- INFORMATION SECONDAIRE -->
     <p
       v-if="secondary"
-      class="text-sm
-             text-slate-500
-             mt-1"
+      class="text-sm text-slate-500 mt-1"
     >
       {{ secondary }}
     </p>
@@ -36,11 +37,20 @@
 
 defineProps({
 
-  label: String,
+  label: {
+    type: String,
+    default: ''
+  },
 
-  value: String,
+  value: {
+    type: String,
+    default: ''
+  },
 
-  secondary: String
+  secondary: {
+    type: String,
+    default: ''
+  }
 
 })
 

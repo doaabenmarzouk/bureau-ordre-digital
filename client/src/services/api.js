@@ -339,6 +339,7 @@ export const courrierApi = {
 
     return response.json()
   },
+  
 
 
   // GET /api/Suivi
@@ -360,4 +361,156 @@ export const courrierApi = {
       `/Suivi/rechercher?motCle=${encodeURIComponent(motCle || '')}`
     )
   }
+  
+}
+
+
+// ==========================================================
+// RÉDACTION IA (mock temporaire)
+// ==========================================================
+
+// Passe à false quand /api/Redaction/ameliorer existera côté backend
+const USE_MOCK_REDACTION = true
+
+function mockDelay(data, ms = 900) {
+  return new Promise(resolve => setTimeout(() => resolve(data), ms))
+}
+
+export const redactionApi = {
+
+  /**
+   * POST /api/Redaction/ameliorer
+   *
+   * payload: { texte: string, champ: 'objet' | 'description' }
+   * réponse attendue: { suggestion: string }
+   */
+
+  async ameliorer(payload) {
+
+    if (USE_MOCK_REDACTION) {
+
+      console.log(
+        '[MOCK] Amélioration demandée:',
+        payload
+      )
+
+      const texteBrut = (payload.texte || '').trim()
+
+      let suggestion
+
+      if (payload.champ === 'objet') {
+
+        suggestion = texteBrut
+          ? texteBrut.charAt(0).toUpperCase() +
+            texteBrut.slice(1).replace(/\.$/, '')
+          : "Demande d'information"
+
+      } else {
+
+        suggestion = texteBrut
+          ? `Je me permets de vous adresser cette demande concernant : ${
+              texteBrut.charAt(0).toLowerCase() + texteBrut.slice(1)
+            }. Je vous remercie de bien vouloir traiter ma requête dans les meilleurs délais et reste à votre disposition pour toute information complémentaire.`
+          : "Je vous adresse cette demande et reste à votre disposition pour tout complément d'information."
+      }
+
+      console.log(
+        '[MOCK] Suggestion générée:',
+        suggestion
+      )
+
+      return mockDelay({ suggestion })
+    }
+
+    console.log(
+      '➡️ Appel POST /Redaction/ameliorer',
+      payload
+    )
+
+    const response = await request('/Redaction/ameliorer', {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    })
+
+    console.log(
+      '📦 Suggestion reçue:',
+      response
+    )
+
+    return response
+  }
+
+}
+
+
+// ==========================================================
+// GÉNÉRATION COMPLÈTE (Objet + Description depuis texte libre)
+// ==========================================================
+
+// Passe à false quand /api/Redaction/generer existera côté backend
+const USE_MOCK_GENERATION = true
+
+export const generationApi = {
+
+  /**
+   * POST /api/Redaction/generer
+   *
+   * payload: { texteLibre: string }
+   * réponse attendue: { objet: string, description: string }
+   */
+
+  async genererDepuisTexteLibre(payload) {
+
+    if (USE_MOCK_GENERATION) {
+
+      console.log(
+        '[MOCK] Génération demandée:',
+        payload
+      )
+
+      const texte = (payload.texteLibre || '').trim()
+
+      if (!texte) {
+        return mockDelay({ objet: '', description: '' })
+      }
+
+      // Objet : première phrase courte, capitalisée
+      const premierePhrase = texte.split(/[.!?]/)[0].trim()
+
+      const objet = premierePhrase.length > 80
+        ? premierePhrase.slice(0, 77) + '...'
+        : premierePhrase.charAt(0).toUpperCase() + premierePhrase.slice(1)
+
+      // Description : version formalisée du texte complet
+      const description =
+        `Je me permets de vous adresser cette demande. ${
+          texte.charAt(0).toUpperCase() + texte.slice(1)
+        }${texte.endsWith('.') ? '' : '.'} Je vous remercie de bien vouloir examiner ma situation et reste à votre disposition pour tout complément d'information nécessaire au traitement de ce dossier.`
+
+      console.log(
+        '[MOCK] Résultat généré:',
+        { objet, description }
+      )
+
+      return mockDelay({ objet, description }, 1200)
+    }
+
+    console.log(
+      '➡️ Appel POST /Redaction/generer',
+      payload
+    )
+
+    const response = await request('/Redaction/generer', {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    })
+
+    console.log(
+      '📦 Génération reçue:',
+      response
+    )
+
+    return response
+  }
+
 }

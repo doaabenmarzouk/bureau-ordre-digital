@@ -2,7 +2,7 @@
 
   <div
     class="bg-white
-           border border-slate-200
+           border border-slate-100
            rounded-2xl
            shadow-sm
            p-4 sm:p-6
@@ -29,7 +29,7 @@
                      rounded-full
                      flex items-center
                      justify-center
-                     text-sm font-bold"
+                     text-sm font-extrabold"
               :class="getStepClass(step.number)"
             >
 
@@ -69,7 +69,7 @@
               <p
                 v-if="currentStep === step.number"
                 class="text-[11px]
-                       text-slate-400
+                       text-yellow-600
                        mt-0.5"
               >
                 Étape en cours
@@ -88,7 +88,7 @@
                    rounded-full"
             :class="
               currentStep > step.number
-                ? 'bg-amber-400'
+                ? 'bg-yellow-400'
                 : 'bg-slate-100'
             "
           />
@@ -145,17 +145,17 @@ function getStepClass(step) {
 
   if (props.currentStep > step) {
 
-    return 'bg-amber-400 text-slate-900'
+    return 'bg-yellow-400 text-slate-900'
 
   }
 
   if (props.currentStep === step) {
 
     return `
-      bg-slate-900
-      text-white
+      bg-yellow-400
+      text-slate-900
       ring-4
-      ring-slate-900/10
+      ring-yellow-400/20
     `
 
   }

@@ -43,6 +43,12 @@
 
       <div class="max-w-4xl">
 
+        <!-- ASSISTANT DE GÉNÉRATION -->
+        <AssistantGeneration
+          :types-courrier="typesCourrier"
+          @apply="appliquerGeneration"
+        />
+
         <!-- TYPE DE COURRIER -->
         <div class="form-group">
 
@@ -106,6 +112,11 @@
 
           </div>
 
+          <AssistantRedaction
+            v-model="form.objet"
+            champ="objet"
+          />
+
         </div>
 
         <!-- DESCRIPTION -->
@@ -135,6 +146,11 @@
             </span>
 
           </div>
+
+          <AssistantRedaction
+            v-model="form.description"
+            champ="description"
+          />
 
         </div>
 
@@ -168,7 +184,7 @@
           <button
             type="button"
             @click="$emit('continue')"
-            class="px-6 py-3.5 rounded-xl bg-slate-900 text-white text-sm font-bold hover:bg-slate-800"
+            class="px-6 py-3.5 rounded-xl bg-yellow-400 text-slate-900 text-sm font-bold hover:bg-yellow-500"
           >
             Continuer →
           </button>
@@ -184,8 +200,10 @@
 <script setup>
 import { ref } from 'vue'
 import FileUpload from './FileUpload.vue'
+import AssistantRedaction from './AssistantRedaction.vue'
+import AssistantGeneration from './AssistantGeneration.vue'
 
-defineProps({
+const props = defineProps({
   selectedService: {
     type: Object,
     default: null
@@ -213,6 +231,14 @@ defineEmits([
 ])
 
 const fileError = ref('')
+
+function appliquerGeneration({ typeCourrierId, objet, description }) {
+  if (typeCourrierId) {
+    props.form.typeCourrierId = typeCourrierId
+  }
+  props.form.objet = objet
+  props.form.description = description
+}
 </script>
 
 <style scoped>

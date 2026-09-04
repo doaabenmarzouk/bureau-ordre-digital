@@ -56,20 +56,19 @@
           </RouterLink>
 
           <RouterLink 
-  to="/a-propos"
-  class="py-6 text-sm font-medium text-slate-600 transition hover:text-slate-900"
->
-  À propos
-</RouterLink>
+              to="/a-propos"
+              class="py-6 text-sm font-medium text-slate-600 transition hover:text-slate-900"
+          >
+             À propos
+          </RouterLink>
 
           <a
-  href="#contact"
-  class="py-6 text-sm font-medium text-slate-600 transition hover:text-slate-900"
->
-  Contact
-</a>
-         <button @click="setLocale('fr')">FR</button>
-         <button @click="setLocale('ar')">عربي</button>
+               href="#contact"
+              class="py-6 text-sm font-medium text-slate-600 transition hover:text-slate-900"
+          >
+             Contact
+          </a>
+        
 
         </nav>
 

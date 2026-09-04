@@ -247,8 +247,8 @@ public async Task<IActionResult> VerifyEmail([FromQuery] string token)
     }
     [HttpPost("logout")]
     [Authorize]
-public async Task<IActionResult> Logout()
-{
+    public async Task<IActionResult> Logout()
+    {
        var jti = User.FindFirst(JwtRegisteredClaimNames.Jti)?.Value;
        var exp = User.FindFirst(JwtRegisteredClaimNames.Exp)?.Value;
        if (string.IsNullOrEmpty(jti) || string.IsNullOrEmpty(exp))
@@ -265,9 +265,9 @@ public async Task<IActionResult> Logout()
 
     return Ok(new { message = "Déconnecté avec succès" });
 }
-[HttpPost("forgot-password")]
-public async Task<IActionResult> ForgotPassword(ForgotPasswordDto dto)
-{
+    [HttpPost("forgot-password")]
+    public async Task<IActionResult> ForgotPassword(ForgotPasswordDto dto)
+   {
     try
     {
         await _authService.ForgotPassword(dto);

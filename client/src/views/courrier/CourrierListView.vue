@@ -57,12 +57,12 @@
             ></span>
           </RouterLink>
 
-          <a
-            href="#"
-            class="text-slate-500 hover:text-slate-900 transition"
+          <RouterLink 
+             to="/a-propos"
+             class="text-slate-500 hover:text-slate-900 transition"
           >
-            À propos
-          </a>
+           À propos
+          </RouterLink>
 
           <a
             href="#"

@@ -1,7 +1,6 @@
 <template>
   <div class="min-h-screen bg-white text-slate-900">
 
-    <!-- ================= NAVBAR ================= -->
     <header
       class="sticky top-0 z-50 border-b border-slate-100 bg-white/95 backdrop-blur"
     >
@@ -518,9 +517,6 @@
       </section>
 
     </main>
-
-
-    <!-- ================= FOOTER ================= -->
     <footer class="border-t border-slate-100 bg-white">
 
       <div
