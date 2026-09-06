@@ -62,33 +62,36 @@
             ></span>
           </RouterLink>
 
-          <a
-            href="/#contact"
-            class="py-6 text-sm font-medium text-slate-600 transition hover:text-slate-900"
-          >
-            Contact
-          </a>
+          
 
         </nav>
 
         <!-- ACTIONS -->
-        <div class="flex items-center gap-3">
+         <div class="flex items-center gap-3">
 
-          <RouterLink
-            to="/login"
-            class="hidden rounded-xl border border-yellow-300 px-5 py-3 text-sm font-semibold text-slate-800 transition hover:bg-yellow-50 sm:block"
-          >
-            Se connecter
-          </RouterLink>
+  <!-- Utilisateur NON connecté -->
+  <template v-if="!authStore.isAuthenticated">
 
-          <RouterLink
-            to="/register"
-            class="rounded-xl bg-yellow-400 px-5 py-3 text-sm font-bold text-slate-900 shadow-sm transition hover:bg-yellow-500 hover:shadow-md"
-          >
-            Créer un compte
-          </RouterLink>
+    <RouterLink
+      to="/login"
+      class="hidden rounded-xl border border-yellow-300 px-5 py-3 text-sm font-semibold text-slate-800 transition hover:bg-yellow-50 sm:block"
+    >
+      Se connecter
+    </RouterLink>
 
-        </div>
+    <RouterLink
+      to="/register"
+      class="rounded-xl bg-yellow-400 px-5 py-3 text-sm font-bold text-slate-900 shadow-sm transition hover:bg-yellow-500 hover:shadow-md"
+    >
+      Créer un compte
+    </RouterLink>
+
+  </template>
+
+  <!-- Utilisateur connecté -->
+  
+
+</div>
       </div>
     </header>
 
@@ -545,4 +548,7 @@
 
 <script setup>
 import logo from '@/assets/logo.png'
+import { useAuthStore } from '@/stores/auth'
+
+const authStore = useAuthStore()
 </script>

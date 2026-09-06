@@ -241,6 +241,21 @@ namespace BureauOrdreDigital.Api.Migrations
                     b.Property<bool>("EmailVerifie")
                         .HasColumnType("bit");
 
+                    b.Property<string>("LoginChallenge")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LoginChallengeExpiration")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("LoginOtpExpiration")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("LoginOtpFailedAttempts")
+                        .HasColumnType("int");
+
+                    b.Property<string>("LoginOtpHash")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("MotDePasseHash")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");

@@ -8,7 +8,7 @@
     <!-- RETOUR -->
     <button
       type="button"
-      @click="router.back()"
+      @click="router.push('/')"
       class="group mb-4 inline-flex items-center gap-2
              text-sm font-medium text-slate-500
              transition-all duration-200

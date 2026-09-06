@@ -1,4 +1,3 @@
-
 <template>
   <div class="min-h-screen bg-white text-slate-900">
 
@@ -12,21 +11,29 @@
 
         <!-- ================= LOGO ================= -->
         <RouterLink to="/" class="flex items-center">
+
           <img
             :src="logo"
             alt="Bureau d'Ordre Digital"
             class="h-12 w-auto object-contain"
           />
-          <!-- Nom de la plateforme -->
+
           <div class="leading-tight">
-            <div class="text-[15px] font-extrabold tracking-wide text-slate-900">
+            <div
+              class="text-[15px] font-extrabold tracking-wide text-slate-900"
+            >
               BUREAU
             </div>
-            <div class="text-[15px] font-extrabold tracking-wide text-slate-900">
+
+            <div
+              class="text-[15px] font-extrabold tracking-wide text-slate-900"
+            >
               D'ORDRE DIGITAL
             </div>
           </div>
+
         </RouterLink>
+
 
         <!-- ================= MENU ================= -->
         <nav class="hidden items-center gap-9 md:flex">
@@ -36,10 +43,12 @@
             class="relative py-6 text-sm font-semibold text-slate-900"
           >
             Accueil
+
             <span
               class="absolute bottom-0 left-0 h-[3px] w-full rounded-full bg-yellow-400"
             ></span>
           </RouterLink>
+
 
           <RouterLink
             to="/courrier/soumettre"
@@ -48,6 +57,7 @@
             Démarches
           </RouterLink>
 
+
           <RouterLink
             to="/courrier"
             class="py-6 text-sm font-medium text-slate-600 transition hover:text-slate-900"
@@ -55,39 +65,50 @@
             Mes courriers
           </RouterLink>
 
-          <RouterLink 
-              to="/a-propos"
-              class="py-6 text-sm font-medium text-slate-600 transition hover:text-slate-900"
-          >
-             À propos
-          </RouterLink>
 
-          <a
-               href="#contact"
-              class="py-6 text-sm font-medium text-slate-600 transition hover:text-slate-900"
+          <RouterLink
+            to="/a-propos"
+            class="py-6 text-sm font-medium text-slate-600 transition hover:text-slate-900"
           >
-             Contact
-          </a>
-        
+            À propos
+          </RouterLink>
 
         </nav>
 
+
         <!-- ================= ACTIONS ================= -->
         <div class="flex items-center gap-3">
-  <template v-if="!auth.isAuthenticated">
-    <RouterLink to="/login" class="hidden items-center gap-2 rounded-xl border border-yellow-300 px-5 py-3 text-sm font-semibold text-slate-800 transition hover:bg-yellow-50 sm:flex">
-      Se connecter
-    </RouterLink>
-    <RouterLink to="/register" class="flex items-center gap-2 rounded-xl bg-yellow-400 px-5 py-3 text-sm font-bold text-slate-900 shadow-sm transition hover:bg-yellow-500 hover:shadow-md">
-      Créer un compte
-    </RouterLink>
-  </template>
-  <button v-else @click="handleLogout" class="flex items-center gap-2 rounded-xl border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
-    Déconnexion
-  </button>
-</div>
-           
-          
+
+          <template v-if="!auth.isAuthenticated">
+
+            <RouterLink
+              to="/login"
+              class="hidden items-center gap-2 rounded-xl border border-yellow-300 px-5 py-3 text-sm font-semibold text-slate-800 transition hover:bg-yellow-50 sm:flex"
+            >
+              Se connecter
+            </RouterLink>
+
+
+            <RouterLink
+              to="/register"
+              class="flex items-center gap-2 rounded-xl bg-yellow-400 px-5 py-3 text-sm font-bold text-slate-900 shadow-sm transition hover:bg-yellow-500 hover:shadow-md"
+            >
+              Créer un compte
+            </RouterLink>
+
+          </template>
+
+
+          <button
+            v-else
+            @click="handleLogout"
+            class="flex items-center gap-2 rounded-xl border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+          >
+            Déconnexion
+          </button>
+
+        </div>
+
       </div>
     </header>
 
@@ -106,6 +127,7 @@
           class="absolute right-0 top-24 hidden h-72 w-72 rounded-full border-[35px] border-yellow-100 lg:block"
         ></div>
 
+
         <div
           class="mx-auto grid max-w-[1400px] items-center gap-14 px-6 py-20 lg:grid-cols-2 lg:px-10 lg:py-28"
         >
@@ -113,18 +135,33 @@
           <!-- ================= TEXTE ================= -->
           <div class="relative z-10 max-w-2xl">
 
+            <!-- Badge -->
             <div
-              class="mb-6 inline-flex items-center gap-2 rounded-full bg-yellow-50 px-4 py-2"
+              class="mb-6 inline-flex items-center gap-2 rounded-full border border-yellow-200 bg-yellow-50 px-4 py-2"
             >
-              <span class="h-2 w-2 rounded-full bg-yellow-400"></span>
+
+              <span class="relative flex h-2 w-2">
+
+                <span
+                  class="absolute inline-flex h-full w-full animate-ping rounded-full bg-yellow-400 opacity-75"
+                ></span>
+
+                <span
+                  class="relative inline-flex h-2 w-2 rounded-full bg-yellow-400"
+                ></span>
+
+              </span>
 
               <span
-                class="text-xs font-bold uppercase tracking-wider text-yellow-600"
+                class="text-xs font-bold uppercase tracking-wider text-yellow-700"
               >
                 Plateforme officielle
               </span>
+
             </div>
 
+
+            <!-- Titre -->
             <h1
               class="text-5xl font-extrabold leading-[1.08] tracking-tight text-slate-900 lg:text-6xl"
             >
@@ -139,12 +176,78 @@
               </span>
             </h1>
 
+
+            <!-- Description -->
             <p
               class="mt-7 max-w-xl text-lg leading-8 text-slate-600"
             >
-              Déposez vos courriers en ligne, suivez leur traitement
-              en temps réel et recevez vos réponses sans vous déplacer.
+              Déposez vos courriers en ligne, suivez leur traitement en temps
+              réel et bénéficiez d'une assistance intelligente pour vous
+              orienter dans vos démarches administratives.
             </p>
+
+
+            <!-- ================= ACCÈS IA ================= -->
+            <div
+              class="group mt-7 max-w-xl rounded-2xl border border-yellow-200 bg-gradient-to-r from-yellow-50 to-white p-4 shadow-sm transition duration-300 hover:-translate-y-0.5 hover:shadow-md"
+            >
+
+              <div class="flex items-start gap-4">
+
+                <!-- Icône -->
+                <div
+                  class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-yellow-400 text-xl font-bold text-slate-900 shadow-sm"
+                >
+                  ✦
+                </div>
+
+
+                <div class="min-w-0 flex-1">
+
+                  <div class="flex flex-wrap items-center gap-2">
+
+                    <h3
+                      class="text-sm font-extrabold text-slate-900"
+                    >
+                      Besoin d'aide pour votre démarche ?
+                    </h3>
+
+                    <span
+                      class="rounded-full bg-yellow-100 px-2 py-0.5 text-[10px] font-bold text-yellow-700"
+                    >
+                      IA
+                    </span>
+
+                  </div>
+
+
+                  <p
+                    class="mt-1 text-sm leading-6 text-slate-600"
+                  >
+                    Décrivez simplement ce que vous souhaitez faire.
+                    Notre assistant vous aide à savoir quoi préparer et
+                    vers quel service vous orienter.
+                  </p>
+
+
+                  <a
+                    href="#assistant-ia"
+                    class="mt-2 inline-flex items-center gap-1 text-sm font-bold text-yellow-600 transition hover:text-yellow-700"
+                  >
+                    Obtenir de l'aide
+
+                    <span
+                      class="transition-transform duration-200 group-hover:translate-x-1"
+                    >
+                      →
+                    </span>
+                  </a>
+
+                </div>
+
+              </div>
+
+            </div>
 
 
             <!-- ================= BUTTONS ================= -->
@@ -171,6 +274,7 @@
                 </svg>
 
                 Déposer un courrier
+
               </RouterLink>
 
 
@@ -195,6 +299,7 @@
                 </svg>
 
                 Suivre mon courrier
+
               </RouterLink>
 
             </div>
@@ -203,7 +308,9 @@
             <!-- ================= POINTS FORTS ================= -->
             <div class="mt-10 flex flex-wrap gap-x-8 gap-y-4">
 
+              <!-- Sécurité -->
               <div class="flex items-center gap-2">
+
                 <div
                   class="flex h-8 w-8 items-center justify-center rounded-lg bg-yellow-50 text-yellow-500"
                 >
@@ -213,10 +320,13 @@
                 <span class="text-sm font-semibold text-slate-700">
                   100% sécurisé
                 </span>
+
               </div>
 
 
+              <!-- Suivi -->
               <div class="flex items-center gap-2">
+
                 <div
                   class="flex h-8 w-8 items-center justify-center rounded-lg bg-yellow-50 text-yellow-500"
                 >
@@ -226,10 +336,13 @@
                 <span class="text-sm font-semibold text-slate-700">
                   Suivi en temps réel
                 </span>
+
               </div>
 
 
+              <!-- Notifications -->
               <div class="flex items-center gap-2">
+
                 <div
                   class="flex h-8 w-8 items-center justify-center rounded-lg bg-yellow-50 text-yellow-500"
                 >
@@ -239,6 +352,23 @@
                 <span class="text-sm font-semibold text-slate-700">
                   Notifications
                 </span>
+
+              </div>
+
+
+              <!-- IA -->
+              <div class="flex items-center gap-2">
+
+                <div
+                  class="flex h-8 w-8 items-center justify-center rounded-lg bg-yellow-50 text-yellow-500"
+                >
+                  ✦
+                </div>
+
+                <span class="text-sm font-semibold text-slate-700">
+                  Assistance IA
+                </span>
+
               </div>
 
             </div>
@@ -280,6 +410,7 @@
                     </div>
 
                     <div>
+
                       <div
                         class="h-2 w-24 rounded bg-slate-200"
                       ></div>
@@ -287,6 +418,7 @@
                       <div
                         class="mt-2 h-2 w-16 rounded bg-slate-100"
                       ></div>
+
                     </div>
 
                   </div>
@@ -588,6 +720,7 @@
                     </div>
 
                   </div>
+
                 </div>
 
               </div>
@@ -599,9 +732,74 @@
               ></div>
 
             </div>
+
           </div>
 
         </div>
+
+      </section>
+
+
+      <!-- ================= ASSISTANT PRÉREQUIS ================= -->
+      <section
+        id="assistant-ia"
+        class="border-t border-slate-100 bg-slate-50 px-6 py-16 lg:px-10 lg:py-20"
+      >
+
+        <div class="mx-auto max-w-[1000px]">
+
+          <!-- Présentation -->
+          <div class="mb-8 text-center">
+
+            <div
+              class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-yellow-400 text-xl font-bold text-slate-900 shadow-sm"
+            >
+              ✦
+            </div>
+
+            <p
+              class="text-xs font-bold uppercase tracking-widest text-yellow-500"
+            >
+              Assistance intelligente
+            </p>
+
+            <h2
+              class="mt-3 text-3xl font-extrabold tracking-tight text-slate-900 lg:text-4xl"
+            >
+              Vous ne savez pas par où commencer ?
+            </h2>
+
+            <p
+              class="mx-auto mt-3 max-w-2xl text-base font-medium text-slate-700"
+            >
+              Décrivez votre démarche, nous vous aidons à vous orienter.
+            </p>
+
+            <p
+              class="mx-auto mt-3 max-w-2xl text-sm leading-7 text-slate-500"
+            >
+              Notre assistant IA vous aide à identifier les informations
+              disponibles, les documents à préparer, les conditions à respecter
+              et les délais indicatifs.
+            </p>
+
+          </div>
+
+
+          <!-- Assistant existant -->
+          <AssistantPrerequis />
+
+
+          <!-- Information -->
+          <p
+            class="mt-5 text-center text-xs leading-5 text-slate-400"
+          >
+            Les informations fournies constituent une aide à la préparation
+            de votre démarche et ne remplacent pas une décision officielle.
+          </p>
+
+        </div>
+
       </section>
 
 
@@ -733,11 +931,11 @@
 
             <!-- CARD 5 -->
             <div
-              class="group rounded-2xl border border-slate-100 bg-white p-7 text-center shadow-sm transition hover:-translate-y-1 hover:border-yellow-200 hover:shadow-xl"
+              class="group rounded-2xl border border-yellow-200 bg-yellow-50/30 p-7 text-center shadow-sm transition hover:-translate-y-1 hover:border-yellow-300 hover:shadow-xl"
             >
 
               <div
-                class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-yellow-50 text-2xl text-yellow-500 transition group-hover:bg-yellow-400 group-hover:text-white"
+                class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-yellow-400 text-2xl text-slate-900 transition group-hover:bg-yellow-500"
               >
                 ✦
               </div>
@@ -749,14 +947,24 @@
               <p
                 class="mt-3 text-sm leading-6 text-slate-500"
               >
-                Bientôt disponible : un assistant IA pour vous guider.
+                Des assistants IA vous aident à comprendre vos démarches,
+                préparer votre demande et identifier le service compétent.
               </p>
+
+              <a
+                href="#assistant-ia"
+                class="mt-4 inline-flex items-center text-xs font-bold text-yellow-600 transition hover:text-yellow-700"
+              >
+                Découvrir l'assistance
+                <span class="ml-1">→</span>
+              </a>
 
             </div>
 
           </div>
 
         </div>
+
       </section>
 
 
@@ -863,6 +1071,7 @@
 
             </div>
 
+
             <!-- STEP 3 -->
             <div
               class="relative text-center md:text-left"
@@ -898,7 +1107,11 @@
               </div>
 
             </div>
+
           </div>
+
+
+          <!-- CTA -->
           <div class="mt-12 text-center">
 
             <RouterLink
@@ -912,6 +1125,7 @@
           </div>
 
         </div>
+
       </section>
 
 
@@ -935,11 +1149,13 @@
             />
           </div>
 
+
           <h2
             class="mt-6 text-3xl font-extrabold text-white lg:text-4xl"
           >
             Vos démarches commencent ici.
           </h2>
+
 
           <p
             class="mx-auto mt-4 max-w-2xl leading-7 text-slate-300"
@@ -947,6 +1163,7 @@
             Une plateforme simple, sécurisée et moderne pour gérer
             vos courriers administratifs sans vous déplacer.
           </p>
+
 
           <RouterLink
             to="/register"
@@ -976,12 +1193,19 @@
           © 2026 Bureau d'Ordre Digital
         </div>
 
+
         <div class="flex gap-6">
+
           <span>Plateforme citoyenne</span>
+
           <span>•</span>
+
           <span>Sécurisée</span>
+
           <span>•</span>
-          <span>Digitale</span>
+
+          <span>Assistée par IA</span>
+
         </div>
 
       </div>
@@ -994,9 +1218,11 @@
 
 <!-- ================= SCRIPT ================= -->
 <script setup>
+
 import logo from '@/assets/logo.png'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import AssistantPrerequis from '@/components/landing/AssistantPrerequis.vue'
 
 const router = useRouter()
 const auth = useAuthStore()

@@ -64,13 +64,6 @@
            À propos
           </RouterLink>
 
-          <a
-            href="#"
-            class="text-slate-500 hover:text-slate-900 transition"
-          >
-            Contact
-          </a>
-
         </nav>
 
 

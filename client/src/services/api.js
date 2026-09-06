@@ -2,7 +2,13 @@
 
 import { useAuthStore } from '@/stores/auth'
 
-const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5029/api'
+const BASE_URL =
+  import.meta.env.VITE_API_URL || 'http://localhost:5029/api'
+
+
+// ==========================================================
+// FONCTION HTTP GÉNÉRIQUE
+// ==========================================================
 
 async function request(path, options = {}) {
   const auth = useAuthStore()
@@ -22,7 +28,7 @@ async function request(path, options = {}) {
   }
 
   console.log('➡️ API:', `${BASE_URL}${path}`)
-  console.log('auth')
+  console.log('🔐 Auth:', auth?.token ? 'Token présent' : 'Sans token')
 
   const response = await fetch(`${BASE_URL}${path}`, {
     ...options,
@@ -37,7 +43,10 @@ async function request(path, options = {}) {
     try {
       const errorBody = await response.json()
 
-      console.error('❌ API error:', errorBody)
+      console.error(
+        '❌ API error détaillée:',
+        JSON.stringify(errorBody, null, 2)
+      )
 
       message =
         errorBody?.message ||
@@ -45,7 +54,7 @@ async function request(path, options = {}) {
         errorBody?.detail ||
         message
     } catch {
-      // réponse non JSON
+      // Réponse non JSON
     }
 
     throw new Error(message)
@@ -59,8 +68,13 @@ async function request(path, options = {}) {
 }
 
 
+// ==========================================================
+// AUTHENTIFICATION
+// ==========================================================
+
 export const authApi = {
 
+  // POST /api/Auth/register
   register(payload) {
     return request('/Auth/register', {
       method: 'POST',
@@ -68,8 +82,55 @@ export const authApi = {
     })
   },
 
+
+  // POST /api/Auth/login
+  //
+  // Première étape :
+  // email + mot de passe
+  //
+  // Réponse attendue :
+  // {
+  //   id,
+  //   nom,
+  //   prenom,
+  //   email,
+  //   telephone,
+  //   token: null,
+  //   requiresOtp: true,
+  //   challenge: "..."
+  // }
   login(payload) {
     return request('/Auth/login', {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    })
+  },
+
+
+  // POST /api/Auth/verify-otp
+  //
+  // Deuxième étape :
+  // challenge + code OTP
+  //
+  // payload :
+  // {
+  //   challenge: "...",
+  //   code: "123456"
+  // }
+  //
+  // Réponse attendue :
+  // {
+  //   id,
+  //   nom,
+  //   prenom,
+  //   email,
+  //   telephone,
+  //   token: "JWT...",
+  //   requiresOtp: false,
+  //   challenge: null
+  // }
+  verifyOtp(payload) {
+    return request('/Auth/verify-otp', {
       method: 'POST',
       body: JSON.stringify(payload)
     })
@@ -82,25 +143,35 @@ export const authApi = {
       `/Auth/verify-email?token=${encodeURIComponent(token)}`
     )
   },
+
+
+  // POST /api/Auth/forgot-password
   forgotPassword(payload) {
-  return request('/Auth/forgot-password', {
-    method: 'POST',
-    body: JSON.stringify(payload)
-  })
-},
+    return request('/Auth/forgot-password', {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    })
+  },
 
-resetPassword(payload) {
-  return request('/Auth/reset-password', {
-    method: 'POST',
-    body: JSON.stringify(payload)
-  })
-}
+
+  // POST /api/Auth/reset-password
+  resetPassword(payload) {
+    return request('/Auth/reset-password', {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    })
+  }
+
 }
 
+
+// ==========================================================
+// SERVICES DESTINATAIRES / ORGANISMES
+// ==========================================================
 
 export const organismesApi = {
 
- 
+  // Recherche avec filtres
   async search(filters = {}) {
 
     const params = new URLSearchParams()
@@ -123,17 +194,21 @@ export const organismesApi = {
       ? `/ServiceDestinataire?${queryString}`
       : '/ServiceDestinataire'
 
-    console.log(' Chargement destinataires:', path)
+    console.log(
+      '🔎 Chargement destinataires:',
+      path
+    )
 
     const response = await request(path)
 
 
-    // Le backend retourne directement un tableau
+    // Backend retourne directement un tableau
     if (Array.isArray(response)) {
       return response
     }
 
-    // Sécurité si ton backend retourne un objet
+
+    // Sécurité si backend retourne un objet
     if (Array.isArray(response?.data)) {
       return response.data
     }
@@ -145,6 +220,7 @@ export const organismesApi = {
     if (Array.isArray(response?.result)) {
       return response.result
     }
+
 
     console.error(
       '❌ Format destinataires invalide:',
@@ -164,7 +240,8 @@ export const organismesApi = {
   // Liste des villes
   async listVilles() {
 
-    const services = await organismesApi.list()
+    const services =
+      await organismesApi.list()
 
     return [
       ...new Set(
@@ -179,7 +256,8 @@ export const organismesApi = {
   // Liste des types d'organismes
   async listTypes() {
 
-    const services = await organismesApi.list()
+    const services =
+      await organismesApi.list()
 
     return [
       ...new Set(
@@ -189,25 +267,33 @@ export const organismesApi = {
       )
     ].sort()
   }
+
 }
 
+
+// ==========================================================
+// TYPES DE COURRIER
+// ==========================================================
 
 export const typeCourrierApi = {
 
   /**
    * GET /api/TypeCourrier
    */
-
   async list() {
 
-    console.log('➡️ Appel GET /TypeCourrier')
+    console.log(
+      '➡️ Appel GET /TypeCourrier'
+    )
 
-    const response = await request('/TypeCourrier')
+    const response =
+      await request('/TypeCourrier')
 
     console.log(
       '📦 Types courrier reçus:',
       response
     )
+
 
     if (Array.isArray(response)) {
       return response
@@ -225,6 +311,7 @@ export const typeCourrierApi = {
       return response.result
     }
 
+
     console.error(
       '❌ Format TypeCourrier invalide:',
       response
@@ -232,8 +319,13 @@ export const typeCourrierApi = {
 
     return []
   }
+
 }
 
+
+// ==========================================================
+// COURRIER
+// ==========================================================
 
 export const courrierApi = {
 
@@ -242,12 +334,12 @@ export const courrierApi = {
    *
    * multipart/form-data
    */
-
   async submit(payload) {
 
     const auth = useAuthStore()
 
     const formData = new FormData()
+
 
     formData.append(
       'TypeCourrierId',
@@ -269,6 +361,7 @@ export const courrierApi = {
       payload.description
     )
 
+
     if (payload.fichiers?.length) {
 
       payload.fichiers.forEach(file => {
@@ -281,10 +374,12 @@ export const courrierApi = {
       })
     }
 
+
     console.log(
       '➡️ Envoi courrier vers:',
       `${BASE_URL}/Courrier`
     )
+
 
     const response = await fetch(
       `${BASE_URL}/Courrier`,
@@ -304,10 +399,12 @@ export const courrierApi = {
       }
     )
 
+
     console.log(
       '⬅️ Réponse courrier:',
       response.status
     )
+
 
     if (!response.ok) {
 
@@ -331,15 +428,15 @@ export const courrierApi = {
           message
 
       } catch {
-        // réponse non JSON
+        // Réponse non JSON
       }
 
       throw new Error(message)
     }
 
+
     return response.json()
   },
-  
 
 
   // GET /api/Suivi
@@ -358,79 +455,52 @@ export const courrierApi = {
   search(motCle) {
 
     return request(
-      `/Suivi/rechercher?motCle=${encodeURIComponent(motCle || '')}`
+      `/Suivi/rechercher?motCle=${encodeURIComponent(
+        motCle || ''
+      )}`
     )
   }
-  
+
 }
 
 
 // ==========================================================
-// RÉDACTION IA (mock temporaire)
+// RÉDACTION IA
 // ==========================================================
-
-// Passe à false quand /api/Redaction/ameliorer existera côté backend
-const USE_MOCK_REDACTION = true
-
-function mockDelay(data, ms = 900) {
-  return new Promise(resolve => setTimeout(() => resolve(data), ms))
-}
 
 export const redactionApi = {
 
   /**
-   * POST /api/Redaction/ameliorer
+   * POST /api/Assistant/redaction
    *
-   * payload: { texte: string, champ: 'objet' | 'description' }
-   * réponse attendue: { suggestion: string }
+   * payload:
+   * {
+   *   texte: string,
+   *   champ: 'objet' | 'description'
+   * }
+   *
+   * réponse :
+   * {
+   *   suggestion: string
+   * }
    */
-
   async ameliorer(payload) {
 
-    if (USE_MOCK_REDACTION) {
-
-      console.log(
-        '[MOCK] Amélioration demandée:',
-        payload
-      )
-
-      const texteBrut = (payload.texte || '').trim()
-
-      let suggestion
-
-      if (payload.champ === 'objet') {
-
-        suggestion = texteBrut
-          ? texteBrut.charAt(0).toUpperCase() +
-            texteBrut.slice(1).replace(/\.$/, '')
-          : "Demande d'information"
-
-      } else {
-
-        suggestion = texteBrut
-          ? `Je me permets de vous adresser cette demande concernant : ${
-              texteBrut.charAt(0).toLowerCase() + texteBrut.slice(1)
-            }. Je vous remercie de bien vouloir traiter ma requête dans les meilleurs délais et reste à votre disposition pour toute information complémentaire.`
-          : "Je vous adresse cette demande et reste à votre disposition pour tout complément d'information."
-      }
-
-      console.log(
-        '[MOCK] Suggestion générée:',
-        suggestion
-      )
-
-      return mockDelay({ suggestion })
-    }
-
     console.log(
-      '➡️ Appel POST /Redaction/ameliorer',
+      '➡️ Appel POST /Assistant/redaction',
       payload
     )
 
-    const response = await request('/Redaction/ameliorer', {
-      method: 'POST',
-      body: JSON.stringify(payload)
-    })
+
+    const response =
+      await request(
+        '/Assistant/redaction',
+        {
+          method: 'POST',
+          body: JSON.stringify(payload)
+        }
+      )
+
 
     console.log(
       '📦 Suggestion reçue:',
@@ -444,66 +514,47 @@ export const redactionApi = {
 
 
 // ==========================================================
-// GÉNÉRATION COMPLÈTE (Objet + Description depuis texte libre)
+// GÉNÉRATION COMPLÈTE
 // ==========================================================
-
-// Passe à false quand /api/Redaction/generer existera côté backend
-const USE_MOCK_GENERATION = true
 
 export const generationApi = {
 
   /**
-   * POST /api/Redaction/generer
+   * POST /api/Assistant/generation
    *
-   * payload: { texteLibre: string }
-   * réponse attendue: { objet: string, description: string }
+   * payload:
+   * {
+   *   texteLibre: string
+   * }
+   *
+   * réponse :
+   * {
+   *   typeCourrierId,
+   *   objet,
+   *   description
+   * }
    */
-
   async genererDepuisTexteLibre(payload) {
 
-    if (USE_MOCK_GENERATION) {
-
-      console.log(
-        '[MOCK] Génération demandée:',
-        payload
-      )
-
-      const texte = (payload.texteLibre || '').trim()
-
-      if (!texte) {
-        return mockDelay({ objet: '', description: '' })
-      }
-
-      // Objet : première phrase courte, capitalisée
-      const premierePhrase = texte.split(/[.!?]/)[0].trim()
-
-      const objet = premierePhrase.length > 80
-        ? premierePhrase.slice(0, 77) + '...'
-        : premierePhrase.charAt(0).toUpperCase() + premierePhrase.slice(1)
-
-      // Description : version formalisée du texte complet
-      const description =
-        `Je me permets de vous adresser cette demande. ${
-          texte.charAt(0).toUpperCase() + texte.slice(1)
-        }${texte.endsWith('.') ? '' : '.'} Je vous remercie de bien vouloir examiner ma situation et reste à votre disposition pour tout complément d'information nécessaire au traitement de ce dossier.`
-
-      console.log(
-        '[MOCK] Résultat généré:',
-        { objet, description }
-      )
-
-      return mockDelay({ objet, description }, 1200)
-    }
-
     console.log(
-      '➡️ Appel POST /Redaction/generer',
+      '➡️ Appel POST /Assistant/generation',
       payload
     )
 
-    const response = await request('/Redaction/generer', {
-      method: 'POST',
-      body: JSON.stringify(payload)
-    })
+
+    const response =
+      await request(
+        '/Assistant/generation',
+        {
+          method: 'POST',
+
+          body: JSON.stringify({
+            texteLibre:
+              payload.texteLibre
+          })
+        }
+      )
+
 
     console.log(
       '📦 Génération reçue:',
@@ -511,6 +562,152 @@ export const generationApi = {
     )
 
     return response
+  }
+
+}
+
+
+// ==========================================================
+// ASSISTANT DESTINATAIRE
+// ==========================================================
+
+export const assistantApi = {
+
+  /**
+   * POST /api/Assistant/destinataire
+   *
+   * multipart/form-data
+   *
+   * payload :
+   * {
+   *   texte: string,
+   *   fichier?: File
+   * }
+   *
+   * réponse :
+   * {
+   *   serviceDestinataireId,
+   *   confidence,
+   *   reason
+   * }
+   */
+  async suggererDestinataire(payload) {
+
+    const formData =
+      new FormData()
+
+
+    formData.append(
+      'Texte',
+      payload.texte ?? ''
+    )
+
+
+    if (payload.fichier) {
+
+      formData.append(
+        'Fichier',
+        payload.fichier
+      )
+
+    }
+
+
+    console.log(
+      '➡️ Appel POST /Assistant/destinataire'
+    )
+
+
+    const response =
+      await request(
+        '/Assistant/destinataire',
+        {
+          method: 'POST',
+          body: formData
+        }
+      )
+
+
+    console.log(
+      '📦 Suggestion destinataire reçue:',
+      response
+    )
+
+
+    return response
+  }
+
+}
+
+
+// ==========================================================
+// ASSISTANT PRÉREQUIS
+// ==========================================================
+
+export const prerequisApi = {
+
+  /**
+   * POST /api/Assistant/prerequis
+   *
+   * Public - sans authentification
+   *
+   * payload :
+   * {
+   *   texte: string
+   * }
+   *
+   * réponse :
+   * {
+   *   demarche,
+   *   documentsRequis: [],
+   *   delai,
+   *   conditions
+   * }
+   */
+  async rechercher(payload) {
+
+    console.log(
+      '➡️ Appel POST /Assistant/prerequis',
+      payload
+    )
+
+
+    const response =
+      await fetch(
+        `${BASE_URL}/Assistant/prerequis`,
+        {
+          method: 'POST',
+
+          headers: {
+            'Content-Type':
+              'application/json'
+          },
+
+          body: JSON.stringify(payload)
+        }
+      )
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        `Erreur serveur (${response.status})`
+      )
+
+    }
+
+
+    const data =
+      await response.json()
+
+
+    console.log(
+      '📦 Prérequis reçus:',
+      data
+    )
+
+
+    return data
   }
 
 }

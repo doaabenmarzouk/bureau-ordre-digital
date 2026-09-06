@@ -9,8 +9,11 @@ public interface IAuthService
 
     Task<LoginResponseDto> Login(LoginDto dto);
 
+    Task<LoginResponseDto> VerifyOtp(VerifyOtpDto dto);
+
     Task VerifyEmail(string token);
+
     Task ForgotPassword(ForgotPasswordDto dto);
 
-     Task ResetPassword(ResetPasswordDto dto);
+    Task ResetPassword(ResetPasswordDto dto);
 }

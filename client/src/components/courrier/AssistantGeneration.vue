@@ -134,8 +134,7 @@ async function generer() {
 
   try {
     const data = await generationApi.genererDepuisTexteLibre({
-      texteLibre: texteLibre.value,
-      typesDisponibles: props.typesCourrier
+      texteLibre: texteLibre.value
     })
     result.value = data
   } catch (err) {

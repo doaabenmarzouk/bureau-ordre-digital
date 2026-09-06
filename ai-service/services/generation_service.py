@@ -27,14 +27,17 @@ class GenerationService:
                 "- Ne change jamais le sens de la demande du citoyen.\n"
                 "- N'invente aucune information.\n"
                 "- N'ajoute aucun fait qui n'est pas présent dans la demande.\n"
-                "- Le type doit obligatoirement appartenir à la liste "
-                "fournie, utilise exactement son ID.\n"
+                "- Le type doit obligatoirement être choisi parmi la liste "
+                "fournie ci-dessous, en te basant sur son ID réel.\n"
+                "- L'ID doit toujours être retourné comme une valeur "
+                "numérique JSON (sans guillemets autour), quelle que soit "
+                "sa valeur.\n"
                 "- L'objet doit être court et explicite.\n"
                 "- La description doit être professionnelle mais rester "
                 "fidèle aux informations fournies.\n"
-                "- Retourne uniquement un JSON valide avec ce format exact :\n"
-                '{{"typeCourrierId": "ID", "objet": "objet du courrier", '
-                '"description": "description du courrier"}}'
+                "- Le format de sortie doit être un JSON valide avec "
+                "exactement 3 clés : typeCourrierId (nombre), objet "
+                "(texte), description (texte)."
             ),
             (
                 "user",
@@ -61,11 +64,12 @@ class GenerationService:
             "types_disponibles": types_text
         })
 
-        # Vérification anti-hallucination : l'id retourné doit exister réellement
-        ids_valides = [str(t["id"]) for t in types_disponibles]
-        type_id = str(resultat.get("typeCourrierId", ""))
+        ids_valides = {str(t["id"]) for t in types_disponibles}
+        type_id_brut = str(resultat.get("typeCourrierId", ""))
 
-        if type_id not in ids_valides:
+        if type_id_brut in ids_valides:
+            type_id = int(type_id_brut)
+        else:
             type_id = None
 
         return {

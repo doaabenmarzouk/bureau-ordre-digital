@@ -12,5 +12,13 @@ public class LoginResponseDto
 
     public string? Telephone { get; set; }
 
-    public string Token { get; set; } = string.Empty;
+    // JWT définitif
+    // Null tant que le OTP n'est pas vérifié
+    public string? Token { get; set; }
+
+    // Indique au frontend qu'un code OTP est nécessaire
+    public bool RequiresOtp { get; set; }
+
+    // Identifie la tentative de connexion en cours
+    public string? Challenge { get; set; }
 }

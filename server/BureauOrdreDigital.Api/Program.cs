@@ -6,12 +6,12 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using BureauOrdreDigital.Api.Shared.Services;
+using BureauOrdreDigital.Api.Modules.Assistant.Services;
+using System.Runtime.ExceptionServices;
+using BureauOrdreDigital.Api.Shared.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// =====================================================
-// DATABASE
-// =====================================================
 
 var connectionString =
     builder.Configuration.GetConnectionString("DefaultConnection")
@@ -23,10 +23,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString)
 );
 
-
-// =====================================================
-// SERVICES
-// =====================================================
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUtilisateurService, UtilisateurService>();
@@ -43,10 +39,12 @@ builder.Services.AddScoped<
 builder.Services.AddScoped<IStockageService, StockageService>();
 builder.Services.AddScoped<ITypeCourrierService, TypeCourrierService>();
 
+// Service IA (communication avec ai-service FastAPI)
+builder.Services.AddHttpClient<IAssistantIaService, AssistantIaService>(client =>
+{
+    client.BaseAddress = new Uri("http://localhost:8000/");
+});
 
-// =====================================================
-// CONTROLLERS + SWAGGER
-// =====================================================
 
 builder.Services.AddControllers();
 
@@ -74,10 +72,6 @@ builder.Services.AddCors(options =>
     });
 });
 
-
-// =====================================================
-// JWT AUTHENTICATION
-// =====================================================
 
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -119,6 +113,7 @@ builder.Services.AddAuthorization();
 // =====================================================
 
 var app = builder.Build();
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 
 // =====================================================
