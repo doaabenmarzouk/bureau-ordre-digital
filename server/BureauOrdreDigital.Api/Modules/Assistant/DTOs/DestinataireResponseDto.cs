@@ -2,7 +2,7 @@ namespace BureauOrdreDigital.Api.Modules.Assistant.DTOs;
 
 public class DestinataireResponseDto
 {
-    public int? ServiceDestinataireId { get; set; }
+    public int? OrganismeId { get; set; }
 
     public double Confidence { get; set; }
 

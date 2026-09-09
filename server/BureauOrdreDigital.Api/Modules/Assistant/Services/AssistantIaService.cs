@@ -78,7 +78,7 @@ public class AssistantIaService : IAssistantIaService
     public async Task<DestinataireResponseDto?>
         SuggererDestinataireAsync(
             DestinataireRequestDto request,
-            List<AiServiceDto> servicesDisponibles)
+            List<AiOrganismeDto> organismesDisponibles)
     {
         using var content =
             new MultipartFormDataContent();
@@ -93,17 +93,17 @@ public class AssistantIaService : IAssistantIaService
             "texte");
 
         // ------------------------------------------------------
-        // Liste des services
+        // Liste des organismes
         // ------------------------------------------------------
 
-        var servicesJson =
+        var organismesJson =
             JsonSerializer.Serialize(
-                servicesDisponibles,
+                organismesDisponibles,
                 _jsonOptions);
 
         content.Add(
-            new StringContent(servicesJson),
-            "servicesDisponibles");
+            new StringContent(organismesJson),
+            "organismesDisponibles");
 
         // ------------------------------------------------------
         // PDF facultatif

@@ -11,18 +11,35 @@ public class AppDbContext : DbContext
     {
     }
 
+    // ================================
+    // DbSets
+    // ================================
+
     public DbSet<Utilisateur> Utilisateurs { get; set; }
+
     public DbSet<Courrier> Courriers { get; set; }
+
     public DbSet<TypeCourrier> TypesCourrier { get; set; }
-    public DbSet<ServiceDestinataire> ServicesDestinataires { get; set; }
+
+    public DbSet<Organisme> Organismes { get; set; }
+
     public DbSet<StatutCourrier> StatutsCourrier { get; set; }
+
     public DbSet<PieceJointe> PiecesJointes { get; set; }
+
     public DbSet<HistoriqueAction> HistoriqueActions { get; set; }
+
     public DbSet<RevokedToken> RevokedTokens { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+
+        // =========================================================
+        // UTILISATEUR
+        // =========================================================
 
         modelBuilder.Entity<Utilisateur>(entity =>
         {
@@ -66,11 +83,96 @@ public class AppDbContext : DbContext
                 .IsUnique();
         });
 
+
+        // =========================================================
+        // ORGANISME
+        // =========================================================
+          // =========================================================
+// ORGANISME
+// =========================================================
+
+modelBuilder.Entity<Organisme>(entity =>
+{
+    entity.ToTable("Organismes");
+
+    entity.HasKey(o => o.Id);
+
+    entity.Property(o => o.Nom)
+        .IsRequired()
+        .HasMaxLength(200);
+
+    entity.Property(o => o.NomAbrege)
+        .HasMaxLength(50);
+
+    entity.Property(o => o.Type)
+        .HasMaxLength(100);
+
+    entity.Property(o => o.Pays)
+        .HasMaxLength(100);
+
+    entity.Property(o => o.Ville)
+        .HasMaxLength(100);
+
+    entity.Property(o => o.Scope)
+        .HasMaxLength(100);
+
+    entity.Property(o => o.Mode)
+        .HasMaxLength(100);
+
+    entity.Property(o => o.Marche)
+        .HasMaxLength(100);
+
+    entity.Property(o => o.Partenaire)
+        .HasMaxLength(150);
+
+    entity.Property(o => o.Contrat)
+        .HasMaxLength(100);
+
+    entity.Property(o => o.DateAnniversaire);
+
+    entity.Property(o => o.VersionElise)
+        .HasMaxLength(100);
+
+    entity.Property(o => o.NombreUtilisateurs);
+
+    entity.Property(o => o.MontantContrat)
+        .HasPrecision(18, 2);
+
+    entity.Property(o => o.ChefProjetCsm)
+        .HasMaxLength(200);
+
+    entity.Property(o => o.CodeDivalto)
+        .HasMaxLength(100);
+
+    entity.Property(o => o.NomContact)
+        .HasMaxLength(200);
+
+    entity.Property(o => o.MailContact)
+        .HasMaxLength(255);
+
+    entity.Property(o => o.TelContact)
+        .HasMaxLength(50);
+
+    entity.Property(o => o.FonctionContact)
+        .HasMaxLength(150);
+
+    entity.Property(o => o.Actif)
+        .IsRequired();
+});
+             
+
+        // =========================================================
+        // COURRIER
+        // =========================================================
+
         modelBuilder.Entity<Courrier>(entity =>
         {
             entity.ToTable("Courriers");
+
             entity.HasKey(c => c.Id);
 
+
+            // Numéro de référence
             entity.Property(c => c.NumReference)
                 .IsRequired()
                 .HasMaxLength(30);
@@ -78,64 +180,99 @@ public class AppDbContext : DbContext
             entity.HasIndex(c => c.NumReference)
                 .IsUnique();
 
+
+            // Utilisateur
             entity.Property(c => c.UtilisateurId)
                 .IsRequired();
 
+
+            // Type courrier
             entity.Property(c => c.TypeCourrierId)
                 .IsRequired();
 
-            entity.Property(c => c.ServiceDestinataireId)
+
+            // Organisme destinataire
+            entity.Property(c => c.OrganismeId)
                 .IsRequired();
 
+
+            // Statut
             entity.Property(c => c.StatutId)
                 .IsRequired();
 
+
+            // Objet
             entity.Property(c => c.Objet)
                 .IsRequired()
                 .HasMaxLength(200);
 
+
+            // Description
             entity.Property(c => c.Description)
                 .IsRequired();
 
+
+            // Dates
             entity.Property(c => c.DateSoumission)
                 .IsRequired();
 
             entity.Property(c => c.DateDerniereMaj)
                 .IsRequired();
 
+
+            // Relation avec Utilisateur
             entity.HasOne(c => c.Utilisateur)
                 .WithMany()
                 .HasForeignKey(c => c.UtilisateurId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+
+            // Relation avec TypeCourrier
             entity.HasOne(c => c.TypeCourrier)
                 .WithMany()
                 .HasForeignKey(c => c.TypeCourrierId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            entity.HasOne(c => c.ServiceDestinataire)
+
+            // Relation avec Organisme
+            entity.HasOne(c => c.Organisme)
                 .WithMany()
-                .HasForeignKey(c => c.ServiceDestinataireId)
+                .HasForeignKey(c => c.OrganismeId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+
+            // Relation avec Statut
             entity.HasOne(c => c.StatutCourrier)
                 .WithMany()
                 .HasForeignKey(c => c.StatutId)
                 .OnDelete(DeleteBehavior.Restrict);
         });
 
+
+        // =========================================================
+        // TYPE COURRIER
+        // =========================================================
+
         modelBuilder.Entity<TypeCourrier>(entity =>
         {
             entity.ToTable("TypeCourrier");
+
             entity.HasKey(c => c.Id);
+
             entity.Property(c => c.Libelle)
                 .IsRequired()
                 .HasMaxLength(100);
         });
 
+
+        // =========================================================
+        // STATUT COURRIER
+        // =========================================================
+
         modelBuilder.Entity<StatutCourrier>(entity =>
         {
             entity.ToTable("StatutCourrier");
+
             entity.HasKey(s => s.Id);
 
             entity.Property(s => s.Code)
@@ -153,34 +290,15 @@ public class AppDbContext : DbContext
                 .IsRequired();
         });
 
-       modelBuilder.Entity<ServiceDestinataire>(entity =>
-{
-    entity.ToTable("ServiceDestinataire");
-    entity.HasKey(s => s.Id);
 
-    entity.Property(s => s.NomService)
-        .IsRequired()
-        .HasMaxLength(150);
-
-    entity.Property(s => s.NomOrganisme)
-        .IsRequired()
-        .HasMaxLength(150);
-
-    entity.Property(s => s.Ville)
-        .IsRequired()
-        .HasMaxLength(100);
-
-    entity.Property(s => s.TypeOrganisme)
-        .IsRequired()
-        .HasMaxLength(100);
-
-    entity.Property(s => s.Actif)
-        .IsRequired();
-});
+        // =========================================================
+        // PIECES JOINTES
+        // =========================================================
 
         modelBuilder.Entity<PieceJointe>(entity =>
         {
             entity.ToTable("PiecesJointes");
+
             entity.HasKey(p => p.Id);
 
             entity.Property(p => p.NomFichier)
@@ -201,15 +319,22 @@ public class AppDbContext : DbContext
             entity.Property(p => p.DateUpload)
                 .IsRequired();
 
+
             entity.HasOne(p => p.Courrier)
                 .WithMany()
                 .HasForeignKey(p => p.CourrierId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
+
+        // =========================================================
+        // HISTORIQUE ACTIONS
+        // =========================================================
+
         modelBuilder.Entity<HistoriqueAction>(entity =>
         {
             entity.ToTable("HistoriqueActions");
+
             entity.HasKey(h => h.Id);
 
             entity.Property(h => h.DateAction)
@@ -218,10 +343,12 @@ public class AppDbContext : DbContext
             entity.Property(h => h.Description)
                 .HasMaxLength(500);
 
+
             entity.HasOne(h => h.Courrier)
                 .WithMany()
                 .HasForeignKey(h => h.CourrierId)
                 .OnDelete(DeleteBehavior.Cascade);
+
 
             entity.HasOne(h => h.StatutCourrier)
                 .WithMany()

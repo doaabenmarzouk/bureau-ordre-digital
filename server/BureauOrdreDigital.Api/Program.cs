@@ -24,6 +24,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 );
 
 
+// =====================================================
+// SERVICES
+// =====================================================
+
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUtilisateurService, UtilisateurService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
@@ -32,14 +36,21 @@ builder.Services.AddScoped<ICourrierService, CourrierService>();
 builder.Services.AddScoped<IHistoriqueService, HistoriqueService>();
 
 builder.Services.AddScoped<
-    IServiceDestinataireService,
-    ServiceDestinataireService
+    IOrganismeService,
+    OrganismeService
 >();
+
+// Importateur Excel
+builder.Services.AddScoped<OrganismeExcelImporter>();
 
 builder.Services.AddScoped<IStockageService, StockageService>();
 builder.Services.AddScoped<ITypeCourrierService, TypeCourrierService>();
 
-// Service IA (communication avec ai-service FastAPI)
+
+// =====================================================
+// SERVICE IA
+// =====================================================
+
 builder.Services.AddHttpClient<IAssistantIaService, AssistantIaService>(client =>
 {
     client.BaseAddress = new Uri("http://localhost:8000/");
@@ -72,6 +83,10 @@ builder.Services.AddCors(options =>
     });
 });
 
+
+// =====================================================
+// AUTHENTICATION
+// =====================================================
 
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -113,6 +128,46 @@ builder.Services.AddAuthorization();
 // =====================================================
 
 var app = builder.Build();
+
+
+// =====================================================
+// IMPORT EXCEL DES ORGANISMES
+// =====================================================
+
+using (var scope = app.Services.CreateScope())
+{
+    var db =
+        scope.ServiceProvider
+            .GetRequiredService<AppDbContext>();
+
+    var importer =
+        scope.ServiceProvider
+            .GetRequiredService<OrganismeExcelImporter>();
+
+    if (!await db.Organismes.AnyAsync())
+    {
+        var cheminExcel = Path.Combine(
+            app.Environment.ContentRootPath,
+            "Imports",
+            "Copie de NeoLedge - MEA-PU - Parc 2026 1.xlsx"
+        );
+
+        var nombreImporte =
+            await importer.ImporterAsync(cheminExcel);
+
+        Console.WriteLine(
+            $"IMPORT EXCEL : {nombreImporte} organismes importés."
+        );
+    }
+    else
+    {
+        Console.WriteLine(
+            "IMPORT EXCEL : la table Organismes contient déjà des données."
+        );
+    }
+}
+
+
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 
@@ -168,7 +223,10 @@ app.MapControllers();
 // HOME
 // =====================================================
 
-app.MapGet("/", () => "Bureau d'Ordre Digital API");
+app.MapGet(
+    "/",
+    () => "Bureau d'Ordre Digital API"
+);
 
 
 // =====================================================

@@ -15,16 +15,16 @@ namespace BureauOrdreDigital.Api.Modules.Assistant.Controllers;
 public class AssistantController : ControllerBase
 {
     private readonly IAssistantIaService _assistantIaService;
-    private readonly IServiceDestinataireService _serviceDestinataireService;
+    private readonly IOrganismeService _organismeService;
     private readonly AppDbContext _context;
 
     public AssistantController(
         IAssistantIaService assistantIaService,
-        IServiceDestinataireService serviceDestinataireService,
+        IOrganismeService organismeService,
         AppDbContext context)
     {
         _assistantIaService = assistantIaService;
-        _serviceDestinataireService = serviceDestinataireService;
+        _organismeService = organismeService;
         _context = context;
     }
 
@@ -102,54 +102,55 @@ public class AssistantController : ControllerBase
     [HttpPost("destinataire")]
     public async Task<IActionResult> Destinataire(
         [FromForm] DestinataireRequestDto request)
+    {
+        Console.WriteLine("===== DESTINATAIRE =====");
+        Console.WriteLine($"Texte : {request.Texte}");
+        Console.WriteLine($"Fichier : {request.Fichier?.FileName}");
+        Console.WriteLine($"Taille : {request.Fichier?.Length}");
+        Console.WriteLine($"ContentType : {request.Fichier?.ContentType}");
 
-    {   Console.WriteLine("===== DESTINATAIRE =====");
-    Console.WriteLine($"Texte : {request.Texte}");
-    Console.WriteLine($"Fichier : {request.Fichier?.FileName}");
-    Console.WriteLine($"Taille : {request.Fichier?.Length}");
-    Console.WriteLine($"ContentType : {request.Fichier?.ContentType}");
         // ------------------------------------------------------
-        // 1. Récupérer les services actifs depuis la DB
+        // 1. Récupérer les organismes actifs
         // ------------------------------------------------------
 
-        var services =
-            await _serviceDestinataireService.RechercherServices(
+        var organismes =
+            await _organismeService.RechercherOrganismes(
                 ville: null,
                 type: null,
                 motCle: null);
 
-        if (services.Count == 0)
+        if (organismes.Count == 0)
         {
             return BadRequest(
                 new
                 {
-                    message = "Aucun service destinataire disponible."
+                    message = "Aucun organisme destinataire disponible."
                 });
         }
 
         // ------------------------------------------------------
-        // 2. Préparer les données envoyées à l'IA
+        // 2. Préparer les organismes pour l'IA
         // ------------------------------------------------------
 
-        var servicesDisponibles = services
-            .Select(s => new AiServiceDto
+        var organismesDisponibles = organismes
+            .Select(o => new AiOrganismeDto
             {
-                Id = s.Id,
-                NomOrganisme = s.NomOrganisme,
-                NomService = s.NomService,
-                Ville = s.Ville,
-                TypeOrganisme = s.TypeOrganisme
+                Id = o.Id,
+                Nom = o.Nom,
+                NomAbrege = o.NomAbrege,
+                Ville = o.Ville,
+                Type = o.Type
             })
             .ToList();
 
         // ------------------------------------------------------
-        // 3. Demander à l'IA de choisir
+        // 3. Demander à l'IA de choisir l'organisme
         // ------------------------------------------------------
 
         var resultat =
             await _assistantIaService.SuggererDestinataireAsync(
                 request,
-                servicesDisponibles);
+                organismesDisponibles);
 
         if (resultat is null)
         {
@@ -163,23 +164,20 @@ public class AssistantController : ControllerBase
 
         // ------------------------------------------------------
         // 4. Vérification de sécurité
-        //
-        // L'IA choisit l'ID.
-        // .NET vérifie simplement que cet ID existe.
         // ------------------------------------------------------
 
-        if (resultat.ServiceDestinataireId.HasValue)
+        if (resultat.OrganismeId.HasValue)
         {
-            var idExiste = servicesDisponibles.Any(
-                s => s.Id == resultat.ServiceDestinataireId.Value);
+            var idExiste = organismesDisponibles.Any(
+                o => o.Id == resultat.OrganismeId.Value);
 
             if (!idExiste)
             {
-                resultat.ServiceDestinataireId = null;
+                resultat.OrganismeId = null;
                 resultat.Confidence = 0;
                 resultat.Reason =
-                    "L'IA a proposé un service qui n'existe pas " +
-                    "dans la liste des services disponibles.";
+                    "L'IA a proposé un organisme qui n'existe pas " +
+                    "dans la liste des organismes disponibles.";
             }
         }
 

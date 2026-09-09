@@ -48,7 +48,7 @@ namespace BureauOrdreDigital.Api.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<int>("ServiceDestinataireId")
+                    b.Property<int>("OrganismeId")
                         .HasColumnType("int");
 
                     b.Property<int>("StatutId")
@@ -65,7 +65,7 @@ namespace BureauOrdreDigital.Api.Migrations
                     b.HasIndex("NumReference")
                         .IsUnique();
 
-                    b.HasIndex("ServiceDestinataireId");
+                    b.HasIndex("OrganismeId");
 
                     b.HasIndex("StatutId");
 
@@ -104,6 +104,117 @@ namespace BureauOrdreDigital.Api.Migrations
                     b.ToTable("HistoriqueActions", (string)null);
                 });
 
+            modelBuilder.Entity("BureauOrdreDigital.Api.Modules.Courrier.Models.Organisme", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Actif")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ChefProjetCsm")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("CodeDivalto")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Contrat")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("DateAnniversaire")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FonctionContact")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("MailContact")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("Marche")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Mode")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<decimal?>("MontantContrat")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Nom")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("NomAbrege")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("NomContact")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<int?>("NombreUtilisateurs")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Partenaire")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("Pays")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Scope")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("TelContact")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("VersionElise")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Ville")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Organismes", (string)null);
+                });
+
             modelBuilder.Entity("BureauOrdreDigital.Api.Modules.Courrier.Models.PieceJointe", b =>
                 {
                     b.Property<Guid>("Id")
@@ -139,42 +250,6 @@ namespace BureauOrdreDigital.Api.Migrations
                     b.HasIndex("CourrierId");
 
                     b.ToTable("PiecesJointes", (string)null);
-                });
-
-            modelBuilder.Entity("BureauOrdreDigital.Api.Modules.Courrier.Models.ServiceDestinataire", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("Actif")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("NomOrganisme")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
-
-                    b.Property<string>("NomService")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
-
-                    b.Property<string>("TypeOrganisme")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Ville")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ServiceDestinataire", (string)null);
                 });
 
             modelBuilder.Entity("BureauOrdreDigital.Api.Modules.Courrier.Models.StatutCourrier", b =>
@@ -315,9 +390,9 @@ namespace BureauOrdreDigital.Api.Migrations
 
             modelBuilder.Entity("BureauOrdreDigital.Api.Modules.Courrier.Models.Courrier", b =>
                 {
-                    b.HasOne("BureauOrdreDigital.Api.Modules.Courrier.Models.ServiceDestinataire", "ServiceDestinataire")
+                    b.HasOne("BureauOrdreDigital.Api.Modules.Courrier.Models.Organisme", "Organisme")
                         .WithMany()
-                        .HasForeignKey("ServiceDestinataireId")
+                        .HasForeignKey("OrganismeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -339,7 +414,7 @@ namespace BureauOrdreDigital.Api.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("ServiceDestinataire");
+                    b.Navigation("Organisme");
 
                     b.Navigation("StatutCourrier");
 

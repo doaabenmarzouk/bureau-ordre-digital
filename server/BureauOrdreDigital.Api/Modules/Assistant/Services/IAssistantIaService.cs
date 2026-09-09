@@ -13,5 +13,5 @@ public interface IAssistantIaService
 
     Task<DestinataireResponseDto?> SuggererDestinataireAsync(
         DestinataireRequestDto request,
-        List<AiServiceDto> servicesDisponibles);
+        List<AiOrganismeDto> organismesDisponibles);
 }
